@@ -28,21 +28,31 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField]
     [Tooltip("The time delay from the pointer entering this object's box and the tooltips apearing. If set to 0, the tooltips will appear instantly on hover.")]
     public float _delay = 0.75f;
+    [SerializeField]
+    [Tooltip("What should the width of the tooltip panel be in relation to the width of the screen. I.E. 400 pixels/1920 = 4.8.")]
+    public float _SizeRationToWidth = 4.8f;
+    [SerializeField]
+    [Tooltip("The width to height ratio. I.E. 0.5 means the height is half the width.")]
+    public float _HeightToWidthRatio = 0.5f;
 
     //Member variable
     private float m_Timer;
     private IEnumerator m_Coroutine;
+    private float m_PanelWidth;
+    private float m_PanelHeight;
     //Object references
     private GameObject tooltip;
     private Image tooltipImage;
     private Text tooltipTitle;
     private Text tooltipInfo;
     private GameObject UICanvas;
-   
+    
 
 
     private void Awake()
     {
+        m_PanelWidth = Screen.width / _SizeRationToWidth;
+        m_PanelHeight = m_PanelWidth * _HeightToWidthRatio;
         //Getting references of UI tooltip object.
         tooltip = GameObject.FindWithTag("UI").transform.FindChild("Popups").transform.FindChild("Tooltip").gameObject;
         tooltipImage = tooltip.transform.FindChild("image").gameObject.GetComponent<Image>();
@@ -60,29 +70,19 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
         m_Coroutine = Activate(tooltip);
         StartCoroutine(m_Coroutine);
 
-        float sizingFactor = Screen.width / 800f;
-        tooltipImage.color = _backgroundColor;
+        //float sizingFactor = Screen.width / 1920f;
+        tooltip.GetComponent<Image>().color = _backgroundColor;
 
         tooltipTitle.text = _title;
         tooltipTitle.color = _titleFontColor;
         tooltipInfo.text = _info;
         tooltipInfo.color = _infoFontColor;
 
-        if (_info == "")
-        {
-            float panelWidth = _title.Length * 9f;
-            tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(panelWidth, 25f);
-            tooltip.transform.FindChild("info").GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
+        //Size the tooltip based on screen size.
+        tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(m_PanelWidth, m_PanelHeight);
+        
 
-        }
-        else {
-            float panelSize = (Mathf.RoundToInt(_info.Length / 35)) * 15;
-            tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(200f, panelSize + 40f);
-            tooltip.transform.FindChild("info").GetComponent<RectTransform>().sizeDelta = new Vector2(180f, tooltip.transform.FindChild("info").GetComponent<RectTransform>().sizeDelta.y);
-
-        }
-
-        tooltip.transform.position = new Vector3(Mathf.Clamp(eventData.position.x, 0f, Screen.width - tooltip.GetComponent<RectTransform>().sizeDelta.x * sizingFactor), eventData.position.y);
+        tooltip.transform.position = new Vector3(Mathf.Clamp(eventData.position.x, 0f, Screen.width - tooltip.GetComponent<RectTransform>().sizeDelta.x), eventData.position.y);
 
 
 
