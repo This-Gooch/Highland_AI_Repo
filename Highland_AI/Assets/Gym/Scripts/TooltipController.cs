@@ -36,7 +36,6 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public float _HeightToWidthRatio = 0.5f;
 
     //Member variable
-    private float m_Timer;
     private IEnumerator m_Coroutine;
     private float m_PanelWidth;
     private float m_PanelHeight;
@@ -45,7 +44,6 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private Image tooltipImage;
     private Text tooltipTitle;
     private Text tooltipInfo;
-    private GameObject UICanvas;
     
 
 

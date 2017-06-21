@@ -39,8 +39,7 @@ public static class Extension_Methods {
     
     
 }
-
-//Personal preference for quick debugs. Instead for Debug.Log() you can use console.log.
+//Personal preference for quick debugs. Instead for Debug.Log() you can use console.log().
 public static class console
 {
     public static void log(object message)

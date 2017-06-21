@@ -13,5 +13,7 @@ public class Card {
     public ECallPhase m_CallPhase { get; private set;/*Setting the call phase should never be done in code. should be set at card creation.*/ }
 
     //Tooltip information (May move this outside of the class).
-    public Tooltip m_Tooltip; 
+    public Tooltip m_Tooltip;
+
+    //TODO add relevant variables/functions for this class based on design.
 }
