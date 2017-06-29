@@ -1,12 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour {
 
+    #region Editor references
+    [SerializeField]
+    Image _Portrait;
+    [SerializeField]
+    Text _Health;
+    [SerializeField]
+    Text _Defence;
+    [SerializeField]
+    Text _Attack;
+    [SerializeField]
+    Text _Utility;
+    #endregion
+
+    #region Public members
+    public int mHealth  { get; private set; }
+    public int mDefence { get; private set; }
+    public int mAttack  { get; private set; }
+    public int mUtility { get; private set; }
+    #endregion
+
+    #region Private members
+    private string mPortraitImagePath = "Units/Portraits/main";
+
+    #endregion
 
     private void Awake()
     {
+        _Portrait.sprite = Resources.Load<Sprite>(mPortraitImagePath) as Sprite;
     }
 
     private void Start()
@@ -19,10 +45,6 @@ public class Unit : MonoBehaviour {
         EventHandler_Gameplay.NewUnitCreated(this.gameObject);
     }
 
-    void Update()
-    {
-
-    }
 
     #region Events
     public void KillUnit()

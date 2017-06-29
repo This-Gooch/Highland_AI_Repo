@@ -4,11 +4,22 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour {
 
-    public List<GameObject> Allies = new List<GameObject>();
-    int allyTeamSize;
-    public List<GameObject> Opponents =  new List<GameObject>();
-    int opponentTeamSize;
+    #region Public Member
 
+    public List<Unit> P1_Units = new List<Unit>();
+    public List<Unit> P2_Units = new List<Unit>();
+    #endregion
+
+    #region Private member
+    private int P1_TeamSize;
+    private int P2_TeamSize;
+
+    #endregion
+
+
+    //Checks to make sure all units are dead for win condition.
+    int checkAlliesLethal;
+    int checkOpponentsLethal;
 
     public bool selectingTarget;
     public GameObject activeAction;
@@ -19,7 +30,6 @@ public class BattleManager : MonoBehaviour {
     public List<Action_TurnStart> act_Start = new List<Action_TurnStart>();
     public List<Action_Immediate> act_Immediate = new List<Action_Immediate>();
     public List<Action_TurnEnd> act_End = new List<Action_TurnEnd>();
-    //public GameObject[] exicutionOrder;
 
     /* The purpose of this script is to manage the battle phases. May use a state machine for this.
      * Battle Start
@@ -49,8 +59,8 @@ public class BattleManager : MonoBehaviour {
 
     private void Start()
     {
-        allyTeamSize = Allies.Count;
-        opponentTeamSize = Opponents.Count;
+        P1_TeamSize = P1_Units.Count;
+        P2_TeamSize = P2_Units.Count;
         NextState();
     } 
 
@@ -63,6 +73,8 @@ public class BattleManager : MonoBehaviour {
             System.Reflection.BindingFlags.Instance);
         StartCoroutine((IEnumerator)info.Invoke(this, null));
     }
+
+    #region States
     //Check the Exxhaust Status of unit. First Phase of a turn.
     IEnumerator ExhaustToActiveState()
     {
@@ -75,38 +87,6 @@ public class BattleManager : MonoBehaviour {
         Debug.Log("ExhaustToActiveState: Exit");
         CheckLethal();
         NextState();
-    }
-
-    void CheckExhaustStatus()
-    {
-        foreach (GameObject unit in Allies)
-        {
-            if(unit.GetComponent<UnitStats>().exhaustStateCount > 0)
-            {
-                Debug.Log("Reduce Exhaust Count");
-                unit.GetComponent<UnitStats>().exhaustStateCount--;
-            }
-        }
-        ResetToBaseStats();
-        state = State.TurnStart;
-    }
-
-    void ResetToBaseStats()
-    {
-        foreach (GameObject unit in Allies)
-        {
-            if(unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
-            {
-                unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
-            }
-        }
-        foreach (GameObject unit in Opponents)
-        {
-            if (unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
-            {
-                unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
-            }
-        }
     }
     //Use this phase for any recurring Turn Start effects.
     IEnumerator TurnStartState()
@@ -134,18 +114,8 @@ public class BattleManager : MonoBehaviour {
         CheckLethal();
         NextState();
     }
-
-    void TriggerActionDraws()
-    {
-        foreach(GameObject unit in Allies)
-        {
-            if(unit.GetComponent<UnitStats>().exhaustStateCount == 0)
-            unit.GetComponent<ActionManager>().DrawActions();
-        }
-        state = State.Execute;
-    }
     //This is the players turn state. This will also be where we call the enemy AI decicions.
-	IEnumerator ExecuteState()
+    IEnumerator ExecuteState()
     {
         Debug.Log("ExecuteState: Enter");
         while (state == State.Execute)
@@ -156,47 +126,6 @@ public class BattleManager : MonoBehaviour {
         CheckLethal();
         NextState();
     }
-
-    public void FinishExecuteState()
-    {
-        state = State.ActiveToExhaust;
-    }
-/*
-    public void ExecuteActions()
-    {
-        Debug.Log("Execute Activated");
-        foreach (Action_Immediate act in act_Immediate)
-        {
-            act.GetComponent<Action_Immediate>().ExecuteAction();
-        }
-        state = State.CheckLethal;
-    }
-*/
-/*
-    IEnumerator CheckLethalState()
-    {
-        Debug.Log("CheckLethalState: Enter");
-        while (state == State.CheckLethal)
-        {
-            yield return null;
-        }
-        Debug.Log("CheckLethalState: Exit");
-        NextState();
-    }
-    
-    void CheckUnitHealth()
-    {
-        foreach (GameObject unit in Allies)
-        {
-            if (unit.GetComponent<UnitStats>().health <= 0)
-            {
-                Debug.Log(unit.name + " is dead");
-            }
-            state = State.ActiveToExhaust;
-        }
-    }
-    */
-    //This is when we check the deck and hand to see if they are empty, then set the unit to an exhaust state.
     IEnumerator ActiveToExhaustState()
     {
         Debug.Log("ActiveToExhaustState: Enter");
@@ -209,24 +138,6 @@ public class BattleManager : MonoBehaviour {
         CheckLethal();
         NextState();
     }
-
-    void CheckActiveToExhaust()
-    {
-        foreach (GameObject unit in Allies)
-        {
-            if (unit.GetComponent<ActionManager>().stackDeck.Count == 0 
-                && unit.GetComponent<ActionManager>().inHand.Count == 0
-                && unit.GetComponent<UnitStats>().exhaustStateCount == 0)
-            {
-                Debug.Log("Setting " + unit.name + " to Exhaust State");
-                unit.GetComponent<UnitStats>().exhaustStateCount += 2;
-                unit.GetComponent<ActionManager>().RestockStack();
-            }
-        }
-        state = State.EndTurn;
-    }
-
-    //Any End Turn effects are called here.
     IEnumerator EndTurnState()
     {
         Debug.Log("EndTurnState: Enter");
@@ -242,7 +153,7 @@ public class BattleManager : MonoBehaviour {
 
     IEnumerator WinState()
     {
-        while(state == State.Win)
+        while (state == State.Win)
         {
             yield return null;
         }
@@ -256,38 +167,108 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
-    //Checks to make sure all units are dead for win condition.
-    int checkAlliesLethal;
-    int checkOpponentsLethal;
+    #endregion
+
+    #region Events Called
+    void CheckExhaustStatus()
+    {
+        foreach (Unit unit in P1_Units)
+        {
+            if(unit.GetComponent<UnitStats>().exhaustStateCount > 0)
+            {
+                Debug.Log("Reduce Exhaust Count");
+                unit.GetComponent<UnitStats>().exhaustStateCount--;
+            }
+        }
+        ResetToBaseStats();
+        state = State.TurnStart;
+    }
+
+    void ResetToBaseStats()
+    {
+        foreach (Unit unit in P1_Units)
+        {
+            if(unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
+            {
+                unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
+            }
+        }
+        foreach (Unit unit in P2_Units)
+        {
+            if (unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
+            {
+                unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
+            }
+        }
+    }
+    void TriggerActionDraws()
+    {
+        foreach (Unit unit in P1_Units)
+        {
+            if (unit.GetComponent<UnitStats>().exhaustStateCount == 0)
+                unit.GetComponent<ActionManager>().DrawActions();
+        }
+        state = State.Execute;
+    }
+
+
+    public void FinishExecuteState()
+    {
+        state = State.ActiveToExhaust;
+    }
+
+    void CheckActiveToExhaust()
+    {
+        foreach (Unit unit in P1_Units)
+        {
+            if (unit.GetComponent<ActionManager>().stackDeck.Count == 0
+                && unit.GetComponent<ActionManager>().inHand.Count == 0
+                && unit.GetComponent<UnitStats>().exhaustStateCount == 0)
+            {
+                Debug.Log("Setting " + unit.name + " to Exhaust State");
+                unit.GetComponent<UnitStats>().exhaustStateCount += 2;
+                unit.GetComponent<ActionManager>().RestockStack();
+            }
+        }
+        state = State.EndTurn;
+    }
     public void CheckLethal()
     {
         checkAlliesLethal = 0;
         checkOpponentsLethal = 0;
 
-        foreach(GameObject unit in Allies)
+        foreach (Unit unit in P1_Units)
         {
-            if(unit.GetComponent<UnitStats>().health <= 0)
+            if (unit.GetComponent<UnitStats>().health <= 0)
             {
                 checkAlliesLethal++;
             }
         }
-        if(checkAlliesLethal == allyTeamSize)
+        if (checkAlliesLethal == P1_TeamSize)
         {
             Debug.Log("You lose");
             state = State.Lose;
         }
 
-        foreach (GameObject unit in Opponents)
+        foreach (Unit unit in P2_Units)
         {
             if (unit.GetComponent<UnitStats>().health <= 0)
             {
                 checkOpponentsLethal++;
             }
         }
-        if (checkOpponentsLethal == opponentTeamSize)
+        if (checkOpponentsLethal == P2_TeamSize)
         {
             Debug.Log("You Win");
             state = State.Win;
         }
     }
+    #endregion
+
+
+
+
+
+ 
+    
 }

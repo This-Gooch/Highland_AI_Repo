@@ -1,5 +1,6 @@
 ﻿namespace NSGameplay {
 
+    //Card/Action related namespace.
     namespace Cards
     {
         /// <summary>
@@ -41,4 +42,45 @@
 
     }
 
+    //State machine related namespace.
+    namespace StateMachine
+    {
+        //State of the FSM.
+        public enum State
+        {
+            DEBUG,
+
+            P1_Draw,
+            /*Transition*/
+            /// <summary>
+            /// Draw_To_Play
+            /// </summary>
+            P1_PlayPhase,
+                /*SubPhase*/P1_PlayPhase_Action,//Actions execute
+            P1_EndTurn,
+
+            P2_Draw,
+            /*Transition*/
+            /// <summary>
+            /// Draw_To_Play
+            /// </summary>
+            P2_PlayPhase,
+            /*SubPhase*/
+            P2_PlayPhase_Action,//Actions execute
+            P2_EndTurn,
+
+
+
+
+            P1_Win,
+            P2_Win,
+            GameOver_Draw
+           
+        }
+        //Transition used between states.
+        public enum Transition
+        {
+            Draw_To_Play,
+        }
+    }
 }
