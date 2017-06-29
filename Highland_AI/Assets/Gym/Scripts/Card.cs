@@ -16,4 +16,5 @@ public class Card {
     public Tooltip m_Tooltip;
 
     //TODO add relevant variables/functions for this class based on design.
+
 }
