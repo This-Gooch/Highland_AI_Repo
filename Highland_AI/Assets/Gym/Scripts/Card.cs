@@ -14,6 +14,8 @@ public abstract class Card {
     public Tooltip m_Tooltip;
     //Type of card. Once played it will trigger differently.
     public CardType m_type { get; protected set; }
+    //Name of the card
+    public string m_Name { get; private set; }
     //Cost for using the card.
     public int m_Cost { get; protected set; }
     //Needs to be implemented in the child class.

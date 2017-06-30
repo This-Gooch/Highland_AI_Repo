@@ -14,14 +14,14 @@ public class Deck {
     /// </summary>
     private List<Card> m_Deck = new List<Card>();
     //How many cards are left in the deck.
-    public int m_CardsInDeck { get; private set; }
+    public int m_DeckSize { get; private set; }
 
     /// <summary>
     /// List of cards discarded.
     /// </summary>
     private List<Card> m_Discards = new List<Card>();
     //How many cards are left in discards.
-    public int m_CardsInDiscards { get; private set; }
+    public int m_DiscardSize { get; private set; }
 
     #endregion
 
@@ -31,37 +31,37 @@ public class Deck {
     //Removes the top card from the deck and returns it.
     public Card Draw_From_Deck()
     {
-        m_CardsInDeck--;
+        m_DeckSize--;
         return m_Deck.Pop();
     }
     //Removes the top card from the discards and returns it.
     public Card Draw_From_Discards()
     {
-        m_CardsInDiscards--;
+        m_DiscardSize--;
         return m_Discards.Pop();
     }
     //Adds a Card to the Deck at the end index.
     public void Add_To_Deck_End(Card c)
     {
-        m_CardsInDeck++;
+        m_DeckSize++;
         m_Deck.Add(c);
     }
     //Adds a Card to the Deck at the 0 index.
     public void Add_To_Deck_Start(Card c)
     {
-        m_CardsInDeck++;
+        m_DeckSize++;
         m_Deck.Insert(0 , c);
     }
     //Adds a Card to the Discards at the end index.
     public void Add_To_Discards_End(Card c)
     {
-        m_CardsInDiscards++;
+        m_DiscardSize++;
         m_Discards.Add(c);
     }
     //Adds a Card to the Discards at the 0 index.
     public void Add_To_Discards_Start(Card c)
     {
-        m_CardsInDiscards++;
+        m_DiscardSize++;
         m_Discards.Insert(0 , c);
     }
     #endregion

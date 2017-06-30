@@ -50,6 +50,12 @@ public class Unit : MonoBehaviour {
     Text _Utility;
     [SerializeField]
     int _Player;
+    [SerializeField]
+    GameObject _CardSlot1;
+    [SerializeField]
+    GameObject _CardSlot2;
+    [SerializeField]
+    GameObject _CardSlot3;
     #endregion
 
     #region Public members
@@ -60,7 +66,11 @@ public class Unit : MonoBehaviour {
     public int m_Utility         { get; private set; }
     public bool m_Exhausted      { get; private set; }
     public int m_OwningPlayer    { get; private set; }
-    public string m_Name         { get; private set; }    
+    public string m_Name         { get; private set; }
+    //Card in hand for the unit.
+    public List<Card> m_Hand = new List<Card>();
+
+    public Deck m_Deck;
     #endregion
 
     #region Private members
@@ -120,7 +130,12 @@ public class Unit : MonoBehaviour {
 
         UpdateUI();
     }
+    //Draw a card.
+    public void Draw()
+    {
 
+        m_Deck.Draw_From_Deck();
+    }
     #endregion
 
     #region private Methods
