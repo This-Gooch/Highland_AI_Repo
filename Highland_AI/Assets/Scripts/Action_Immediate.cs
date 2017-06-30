@@ -25,7 +25,7 @@ public class Action_Immediate : MonoBehaviour {
         battleMang = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         sourceUnit = GetComponent<ActionTrigger>().sourceUnit;
     }
-	
+	/*
 	public void SetAction()
     {
         battleMang.act_Immediate.Add(this);
@@ -52,5 +52,5 @@ public class Action_Immediate : MonoBehaviour {
         {
             sourceUnit.GetComponent<UnitStats>().health += healingOutput;
         }
-    }
+    }*/
 }

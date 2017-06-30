@@ -27,7 +27,7 @@ public class EventHandler_Gameplay : MonoBehaviour {
         }
     }
     //Calls the delegate
-    public static void UnitDead(GameObject unit, int player)
+    public static void OnUnitDead(GameObject unit, int player)
     {
         if (OnUnitDestroyed != null)
         {

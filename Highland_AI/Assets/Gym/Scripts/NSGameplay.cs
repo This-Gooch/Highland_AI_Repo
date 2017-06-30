@@ -27,6 +27,21 @@
             DEBUG_LAST = 512
         }
         /// <summary>
+        /// Types of cards.
+        ///     Most types are set in the card's constructor.
+        /// </summary>
+        public enum CardType
+        {
+            NULL,
+            DEBUG,
+            Instant,
+            PassiveEffect,
+            Minion,
+            Secret,
+            ERROR
+        }
+
+        /// <summary>
         /// Tooltip:
         /// Contains all the description for the card's tooltip.
         /// </summary>
@@ -56,7 +71,7 @@
             /// Draw_To_Play
             /// </summary>
             P1_PlayPhase,
-                /*SubPhase*/P1_PlayPhase_Action,//Actions execute
+                /*SubPhase*/P1_PlayPhase_Action,//Action executes
             P1_EndTurn,
             P1_Activate,
 
@@ -67,8 +82,7 @@
             /// Draw_To_Play
             /// </summary>
             P2_PlayPhase,
-            /*SubPhase*/
-            P2_PlayPhase_Action,//Actions execute
+                /*SubPhase*/P2_PlayPhase_Action,//Action executes
             P2_EndTurn,
             P2_Activate,
 

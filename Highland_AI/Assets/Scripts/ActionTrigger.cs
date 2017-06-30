@@ -47,13 +47,13 @@ public class ActionTrigger : MonoBehaviour {
                 Debug.Log("Not enough Utility Points");
             }
         }
-        battleMang.CheckLethal();
+        //battleMang.CheckLethal();
     }
 
     void DiscardUsedAction()
     {
         sourceUnit.GetComponent<UnitStats>().utility -= actionRef.utilityCost;
-        actionRef.ExecuteAction();
+        //actionRef.ExecuteAction();
         battleMang.activeAction = null; 
         actionRef.targetUnit = null;
         sourceUnit.GetComponent<ActionManager>().discardDeck.Add(transform.gameObject);

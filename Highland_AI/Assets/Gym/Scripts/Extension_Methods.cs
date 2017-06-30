@@ -16,6 +16,7 @@ public static class Extension_Methods {
             get { return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
         }
     }
+    #region List Extensions
     //Shuffle function for lists
     public static void Shuffle<T>(this IList<T> list)
     {
@@ -36,7 +37,19 @@ public static class Extension_Methods {
         list.RemoveAt(0);
         return r;
     }
+    #endregion
     
-    
-}
 
+
+}
+/// <summary>
+/// Interface that lets you increment decrement
+/// a duration value.
+/// </summary>
+interface IDuration
+{
+    void Increment();
+    void Decrement();
+
+    void Reset();
+}

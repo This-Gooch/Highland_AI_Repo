@@ -1,16 +1,11 @@
-﻿using NSGameplay.Cards;
+﻿using System;
+using NSGameplay.Cards;
 /// <summary>
-/// Parent Class for all cards (Actions):
+/// Parent Class for all cards (Actions/Minion/Passives):
 /// Serializable because most likely will be saved as XML, JSON or other for ease of edit/mod.
 /// </summary>
 [System.Serializable]
 public abstract class Card {
-
-    /// <summary>
-    /// m_CallPhase: The phase/phases that this card's effect is called.
-    /// Used as flags (START_TURN = 8, END_TURN = 128 -> so 136 = START_TURN & END_TURN)
-    /// </summary>
-    public ECallPhase m_CallPhase { get; private set;/*Setting the call phase should never be done in code. should be set at card creation.*/ }
 
     //owning unit
     public Unit m_OwningUnit { get; set; }
@@ -18,21 +13,25 @@ public abstract class Card {
     //Tooltip information (May move this outside of the class).
     public Tooltip m_Tooltip;
     //Type of card. Once played it will trigger differently.
-    public CardType m_type { get; private set; }
+    public CardType m_type { get; protected set; }
     //Cost for using the card.
-    public int m_Cost { get; private set; }
-
+    public int m_Cost { get; protected set; }
+    //Needs to be implemented in the child class.
     public abstract void Play();
+    
     public virtual int Burn()
-    {//Burn utility recovered bonus is half the cost rounded down with 1 being the minimum.
+    {   //Burn utility recovered bonus is half the cost rounded down with 1 being the minimum.
+        //This is virtual so the cost/implementation can be changed in the child class.
         return (m_Cost / 2) > 0 ? (m_Cost / 2) : 1;
     }
 
 }
-
-[System.Serializable]
+//Minion
 public class Minion: Card
 {
+    public Minion() { m_type = CardType.Minion; }
+
+
     public int m_Health { get; private set; }
     public int m_Defence { get; set; }
     public int m_BaseDefence { get; private set; }
@@ -42,18 +41,58 @@ public class Minion: Card
     public int m_OwningPlayer { get; private set; }
     private string m_PortraitImagePath;
 
-    public override void Play() { }
+    public override void Play()
+    {
+        //TODO: Implement play function for minion
+    }
 }
+//Actions
+public class Action : Card
+{   
+    public override void Play()
+    {
+        //TODO: implement play function for actions.
+    }   
 
-
-public enum CardType
+}
+//Passive Card
+public class Passive : Card, IDuration
 {
-    NULL,
-    DEBUG,
-    Instant,
-    PassiveEffect,
-    Minion,
-    Secret,
-    ERROR
-}
+    public Passive() { m_type = CardType.PassiveEffect; }
 
+    public override void Play()
+    {
+        //TODO: implement play function for actions.
+    }
+
+    public void Increment()
+    {
+        if (m_Duration != null)
+        {
+            ++m_Duration;
+        }
+    }
+
+    public void Decrement()
+    {
+        if (m_Duration != null)
+        {
+            --m_Duration;
+        }
+    }
+
+    public void Reset()
+    {
+        m_Duration = m_StartingBaseDuration;
+    }
+
+    /// <summary>
+    /// m_CallPhase: The phase/phases that this card's effect is called.
+    /// Used as flags (START_TURN = 8, END_TURN = 128 -> so 136 = START_TURN & END_TURN)
+    /// </summary>
+    public ECallPhase m_CallPhase { get; protected set;/*Setting the call phase should never be done in code. should be set at card creation.*/ }
+    //How long does this effect lasts. If null = lasts for ever.
+    public int? m_Duration { get; set; }
+    //base duration
+    public int? m_StartingBaseDuration { get; private set; }
+}

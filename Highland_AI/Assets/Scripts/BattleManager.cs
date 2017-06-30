@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NSGameplay.StateMachine;
+using System;
 
 public class BattleManager : MonoBehaviour {
+
+    public static BattleManager instance;
 
     #region Public Member
     //Lists of player's units
@@ -17,45 +20,29 @@ public class BattleManager : MonoBehaviour {
     #endregion
 
 
-    //Checks to make sure all units are dead for win condition.
-    int checkAlliesLethal;
-    int checkOpponentsLethal;
-
     public bool selectingTarget;
     public GameObject activeAction;
 
     public GameObject deckLoc;
     public GameObject discardLoc;
 
-    public List<Action_TurnStart> act_Start = new List<Action_TurnStart>();
-    public List<Action_Immediate> act_Immediate = new List<Action_Immediate>();
-    public List<Action_TurnEnd> act_End = new List<Action_TurnEnd>();
+    //List of passives currently active.
+    public List<Passive> m_ActivePassives = new List<Passive>();
 
-    /* The purpose of this script is to manage the battle phases. May use a state machine for this.
-     * Battle Start
-     * -> Set Exhausted Units to Active
-     * -> Trigger Turn Start abilities
-     * -> Draw Phase
-     * -> Execute (Use abilities)
-     * -> Trigger End Turn abilities
-     * -> Check if Exhausted State should be active on Units
-     * -> End Turn
-     * This will proabably change over time. 
-    */
-
-   /* public enum State
-    {
-        ExhaustToActive,
-        TurnStart,
-        DrawAction,
-        Execute,
-        ActiveToExhaust,
-        EndTurn,
-        Win,
-        Lose,
-    }*/
 
     public State state { get; private set; }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
     private void Start()
     {
@@ -76,8 +63,11 @@ public class BattleManager : MonoBehaviour {
     //Initialization.
     private void Initialize()
     {
+        EventHandler_Gameplay.OnUnitDestroyed += this.OnUnitDestroy;
         state = State.P1_Exhaust;
     }
+
+
     //Skip to the next State.
     private void NextState()
     {
@@ -87,6 +77,69 @@ public class BattleManager : MonoBehaviour {
             System.Reflection.BindingFlags.NonPublic |
             System.Reflection.BindingFlags.Instance);
         StartCoroutine((IEnumerator)info.Invoke(this, null));
+    }
+    //Call everytime a unit dies.
+    private void CheckLethal()
+    {
+        bool p1_Dead = true;
+        bool p2_Dead = true;
+        foreach (Unit unit in P1_Units)
+        {
+            if (unit.m_Health > 0)
+            {
+                p1_Dead = false;
+            }
+        }
+
+        foreach (Unit unit in P2_Units)
+        {
+            if (unit.m_Health > 0)
+            {
+                p2_Dead = false;
+            }
+        }
+        if (p1_Dead && p2_Dead)
+        {
+            state = State.GameOver_Draw;
+            NextState();
+        }
+        else if (p1_Dead)
+        {
+            state = State.GameOver_P2_Win;
+            NextState();
+        }
+        else if (p2_Dead)
+        {
+            state = State.GameOver_P1_Win;
+            NextState();
+        }
+    }
+    #endregion
+
+    #region public Methods
+    //Register a Unit with the manager.
+    public bool RegisterUnit(Unit u)
+    {
+        if (u != null)
+        {
+            if (u.m_OwningPlayer == 1)
+            {
+                P1_Units.Add(u);
+                return true;
+            }
+            else if (u.m_OwningPlayer == 2)
+            {
+                P2_Units.Add(u);
+                return true;
+            }
+            else
+            {
+                Debug.LogError("Error registering unit to BattleManager. Owning player incorrectly defined.");
+                return false;
+            }
+        }
+        Debug.LogError("Error registering unit to BattleManager. Null Reference.");
+        return false;
     }
     #endregion
 
@@ -295,10 +348,9 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (Unit unit in P1_Units)
             {
-                if (unit.GetComponent<UnitStats>().exhaustStateCount > 0)
+                if (unit.m_Exhausted)
                 {
-                    Debug.Log("Reduce Exhaust Count");
-                    unit.GetComponent<UnitStats>().exhaustStateCount--;
+                    Debug.Log("Unit is exhausted");
                 }
             }
             state = State.P1_Draw;
@@ -307,96 +359,21 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (Unit unit in P2_Units)
             {
-                if (unit.GetComponent<UnitStats>().exhaustStateCount > 0)
+                if (unit.m_Exhausted)
                 {
-                    Debug.Log("Reduce Exhaust Count");
-                    unit.GetComponent<UnitStats>().exhaustStateCount--;
+                    Debug.Log("Unit is exhausted");
                 }
             }
             state = State.P2_Draw;
         }
-        ResetToBaseStats();
        
     }
-
-    void ResetToBaseStats()
+    //Called when a unit dies
+    private void OnUnitDestroy(GameObject unit, int player)
     {
-        
-        /*foreach (Unit unit in P1_Units)
-        {
-            if(unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
-            {
-                unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
-            }
-        }
-        foreach (Unit unit in P2_Units)
-        {
-            if (unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
-            {
-                unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
-            }
-        }*/
-    }
-    void TriggerActionDraws()
-    {
-        foreach (Unit unit in P1_Units)
-        {
-            if (unit.GetComponent<UnitStats>().exhaustStateCount == 0)
-                unit.GetComponent<ActionManager>().DrawActions();
-        }
-        //state = State.Execute;
+        Debug.Log("A Unit has died : " + unit.name + " from player " + player);
+        CheckLethal();
     }
 
-
-    public void FinishExecuteState()
-    {
-        //state = State.ActiveToExhaust;
-    }
-
-    void CheckActiveToExhaust()
-    {
-        foreach (Unit unit in P1_Units)
-        {
-            if (unit.GetComponent<ActionManager>().stackDeck.Count == 0
-                && unit.GetComponent<ActionManager>().inHand.Count == 0
-                && unit.GetComponent<UnitStats>().exhaustStateCount == 0)
-            {
-                Debug.Log("Setting " + unit.name + " to Exhaust State");
-                unit.GetComponent<UnitStats>().exhaustStateCount += 2;
-                unit.GetComponent<ActionManager>().RestockStack();
-            }
-        }
-        //state = State.EndTurn;
-    }
-    //Call everytime a unit dies.
-    public void CheckLethal()
-    {
-        bool p1_Dead = true;
-        bool p2_Dead = true;
-        foreach (Unit unit in P1_Units)
-        {
-            if (unit.m_Health > 0)
-            {
-                p1_Dead = false;
-
-            }
-        }       
-
-        foreach (Unit unit in P2_Units)
-        {
-            if (unit.m_Health > 0)
-            {
-                p2_Dead = false;
-            }
-        }
-       
-    }
     #endregion
-
-
-
-
-
- 
-    
 }

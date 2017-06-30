@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour {
 
     private void Awake()
     {
-        Initialize();        
+        Initialize();              
     }
 
     private void Start()
@@ -56,11 +56,21 @@ public class Unit : MonoBehaviour {
         }
         //Trigger new unit created.
         EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.m_OwningPlayer);
+
+        Register();
     }
 
     #region public Methods
-
-    
+    //When attacking an other unit must defend.
+    public void Attack()
+    {
+        //TODO: implement attack for units.
+    }
+    //The flip side of an attack
+    public void Defend()
+    {
+        //TODO: implement defend for units.
+    }
 
     #endregion
 
@@ -68,11 +78,24 @@ public class Unit : MonoBehaviour {
     //Init on start.
     private void Initialize()
     {
+        /*Debug init. Real value should come from file*/
+        m_Health = 100;
+        m_Attack = 10;
+        m_BaseDefence = 5;
+        m_Utility = 2;
+
         _Portrait.sprite = Resources.Load<Sprite>(m_PortraitImagePath) as Sprite;
         m_Exhausted = false;
         m_OwningPlayer = _Player;
+        m_Defence = m_BaseDefence;
+       
     }
 
+    private void Register()
+    {
+        //TODO: register to networked battle manager instead.
+        BattleManager.instance.RegisterUnit(this);
+    }
 
     #endregion
 
@@ -80,7 +103,7 @@ public class Unit : MonoBehaviour {
     public void KillUnit()
     {
         //Trigger unit death
-        EventHandler_Gameplay.UnitDead(this.gameObject, this.m_OwningPlayer);
+        EventHandler_Gameplay.OnUnitDead(this.gameObject, this.m_OwningPlayer);
     }
     //Implementation of the event.
     private void OnUnitDestroy(GameObject unit, int player)
