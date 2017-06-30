@@ -21,17 +21,17 @@ public class Unit : MonoBehaviour {
     #endregion
 
     #region Public members
-    public int mHealth          { get; private set; }
-    public int mDefence         { get; set; }
-    public int mBaseDefence     { get; private set; }
-    public int mAttack          { get; private set; }
-    public int mUtility         { get; private set; }
-    public bool mExhausted      { get; private set; }
-    public int mOwningPlayer    { get; private set; }
+    public int m_Health          { get; private set; }
+    public int m_Defence         { get; set; }
+    public int m_BaseDefence     { get; private set; }
+    public int m_Attack          { get; private set; }
+    public int m_Utility         { get; private set; }
+    public bool m_Exhausted      { get; private set; }
+    public int m_OwningPlayer    { get; private set; }
     #endregion
 
     #region Private members
-    private string mPortraitImagePath = "Units/Portraits/main";
+    private string m_PortraitImagePath = "Units/Portraits/main";
     
     #endregion
 
@@ -46,16 +46,16 @@ public class Unit : MonoBehaviour {
         //This is mostly an example of usage at the momment.
         EventHandler_Gameplay.OnUnitSpawn += this.NewUnitCreated;
         EventHandler_Gameplay.OnUnitDestroyed += this.OnUnitDestroy;
-        if (mOwningPlayer == 1)
+        if (m_OwningPlayer == 1)
         {
             EventHandler_Gameplay.OnPlayer1TurnBegin += this.OnTurnBegin;
         }
-        else if (mOwningPlayer == 2)
+        else if (m_OwningPlayer == 2)
         {
             EventHandler_Gameplay.OnPlayer2TurnBegin += this.OnTurnBegin;
         }
         //Trigger new unit created.
-        EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.mOwningPlayer);
+        EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.m_OwningPlayer);
     }
 
     #region public Methods
@@ -68,9 +68,9 @@ public class Unit : MonoBehaviour {
     //Init on start.
     private void Initialize()
     {
-        _Portrait.sprite = Resources.Load<Sprite>(mPortraitImagePath) as Sprite;
-        mExhausted = false;
-        mOwningPlayer = _Player;
+        _Portrait.sprite = Resources.Load<Sprite>(m_PortraitImagePath) as Sprite;
+        m_Exhausted = false;
+        m_OwningPlayer = _Player;
     }
 
 
@@ -80,7 +80,7 @@ public class Unit : MonoBehaviour {
     public void KillUnit()
     {
         //Trigger unit death
-        EventHandler_Gameplay.UnitDead(this.gameObject, this.mOwningPlayer);
+        EventHandler_Gameplay.UnitDead(this.gameObject, this.m_OwningPlayer);
     }
     //Implementation of the event.
     private void OnUnitDestroy(GameObject unit, int player)
@@ -92,13 +92,13 @@ public class Unit : MonoBehaviour {
     //Implementation of the event.
     private void NewUnitCreated(GameObject unit, int player)
     {
-        console.log("New Unit created: " + gameObject.name + " for player " + player);
+        //Debug.Log("New Unit created: " + gameObject.name + " for player " + player);
     }
     //Reset the unit's stats at the start of turn.
     private void OnTurnBegin(GameObject unit, int player)
     {
-        console.log("OnTurnBegin:");
-        mDefence = mBaseDefence;
+        Debug.Log("OnTurnBegin:" + gameObject.name + ". From player " + m_OwningPlayer);
+        m_Defence = m_BaseDefence;
     }
 
     #endregion

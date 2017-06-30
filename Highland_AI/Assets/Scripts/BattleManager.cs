@@ -12,9 +12,7 @@ public class BattleManager : MonoBehaviour {
     #endregion
 
     #region Private member
-
-   // private int P1_TeamSize;
-    //private int P2_TeamSize;
+    
 
     #endregion
 
@@ -57,23 +55,28 @@ public class BattleManager : MonoBehaviour {
         Lose,
     }*/
 
-    public State state;
+    public State state { get; private set; }
 
     private void Start()
     {
         Initialize();
-        //P1_TeamSize = P1_Units.Count;
-        //P2_TeamSize = P2_Units.Count;
         NextState();
     }
 
-
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            state++;
+            NextState();
+        }
+    }
 
     #region Private Methods
     //Initialization.
     private void Initialize()
     {
-        state = State.P1_Draw;
+        state = State.P1_Exhaust;
     }
     //Skip to the next State.
     private void NextState()
@@ -100,6 +103,8 @@ public class BattleManager : MonoBehaviour {
         while (state == State.P1_Exhaust)
         {
             CheckExhaustStatus(1);
+            EventHandler_Gameplay.OnTurnBegin(this.gameObject, 1);
+            state = State.P1_Draw;
             yield return null;
         }
         Debug.Log("P1_ExhaustState: Exit");
@@ -160,6 +165,7 @@ public class BattleManager : MonoBehaviour {
         while (state == State.P1_Activate)
         {
             //TODO: figure out what happens here.
+            state = State.P2_Exhaust;
             yield return null;
         }
         Debug.Log("P1_ActivateState: Exit");
@@ -177,6 +183,7 @@ public class BattleManager : MonoBehaviour {
         while (state == State.P2_Exhaust)
         {
             CheckExhaustStatus(2);
+            EventHandler_Gameplay.OnTurnBegin(this.gameObject, 2);
             yield return null;
         }
         Debug.Log("P2_ExhaustState: Exit");
@@ -237,6 +244,7 @@ public class BattleManager : MonoBehaviour {
         while (state == State.P2_Activate)
         {
             //TODO: figure out what happens here.
+            state = State.P1_Exhaust;
             yield return null;
         }
         Debug.Log("P2_ActivateState: Exit");
@@ -313,7 +321,8 @@ public class BattleManager : MonoBehaviour {
 
     void ResetToBaseStats()
     {
-        foreach (Unit unit in P1_Units)
+        
+        /*foreach (Unit unit in P1_Units)
         {
             if(unit.GetComponent<UnitStats>().defense < unit.GetComponent<UnitStats>().baseDefense)
             {
@@ -326,7 +335,7 @@ public class BattleManager : MonoBehaviour {
             {
                 unit.GetComponent<UnitStats>().defense = unit.GetComponent<UnitStats>().baseDefense;
             }
-        }
+        }*/
     }
     void TriggerActionDraws()
     {
@@ -366,7 +375,7 @@ public class BattleManager : MonoBehaviour {
         bool p2_Dead = true;
         foreach (Unit unit in P1_Units)
         {
-            if (unit.mHealth > 0)
+            if (unit.m_Health > 0)
             {
                 p1_Dead = false;
 
@@ -375,7 +384,7 @@ public class BattleManager : MonoBehaviour {
 
         foreach (Unit unit in P2_Units)
         {
-            if (unit.mHealth > 0)
+            if (unit.m_Health > 0)
             {
                 p2_Dead = false;
             }

@@ -40,14 +40,14 @@ public class EventHandler_Gameplay : MonoBehaviour {
         {
             if (OnPlayer1TurnBegin != null)
             {
-                OnPlayer2TurnBegin(unit, player);
+                OnPlayer1TurnBegin(unit, player);
             }           
         }
         else if (player == 2)
         {
             if (OnPlayer2TurnBegin != null)
             {
-                OnPlayer1TurnBegin(unit, player);
+                OnPlayer2TurnBegin(unit, player);
             }            
         }
         else
