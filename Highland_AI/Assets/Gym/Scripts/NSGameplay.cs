@@ -49,7 +49,7 @@
         public enum State
         {
             DEBUG,
-
+            P1_Exhaust,
             P1_Draw,
             /*Transition*/
             /// <summary>
@@ -58,7 +58,9 @@
             P1_PlayPhase,
                 /*SubPhase*/P1_PlayPhase_Action,//Actions execute
             P1_EndTurn,
+            P1_Activate,
 
+            P2_Exhaust,
             P2_Draw,
             /*Transition*/
             /// <summary>
@@ -68,19 +70,19 @@
             /*SubPhase*/
             P2_PlayPhase_Action,//Actions execute
             P2_EndTurn,
+            P2_Activate,
 
 
 
-
-            P1_Win,
-            P2_Win,
+            GameOver_P1_Win,
+            GameOver_P2_Win,
             GameOver_Draw
            
         }
         //Transition used between states.
         public enum Transition
         {
-            Draw_To_Play,
+            //Draw_To_Play
         }
     }
 }

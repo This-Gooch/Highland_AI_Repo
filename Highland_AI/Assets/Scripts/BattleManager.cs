@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NSGameplay.StateMachine;
 
 public class BattleManager : MonoBehaviour {
 
     #region Public Member
-
+    //Lists of player's units
     public List<Unit> P1_Units = new List<Unit>();
     public List<Unit> P2_Units = new List<Unit>();
     #endregion
 
     #region Private member
-    private int P1_TeamSize;
-    private int P2_TeamSize;
+
+   // private int P1_TeamSize;
+    //private int P2_TeamSize;
 
     #endregion
 
@@ -43,7 +45,7 @@ public class BattleManager : MonoBehaviour {
      * This will proabably change over time. 
     */
 
-    public enum State
+   /* public enum State
     {
         ExhaustToActive,
         TurnStart,
@@ -53,135 +55,260 @@ public class BattleManager : MonoBehaviour {
         EndTurn,
         Win,
         Lose,
-    }
+    }*/
 
     public State state;
 
     private void Start()
     {
-        P1_TeamSize = P1_Units.Count;
-        P2_TeamSize = P2_Units.Count;
+        Initialize();
+        //P1_TeamSize = P1_Units.Count;
+        //P2_TeamSize = P2_Units.Count;
         NextState();
-    } 
+    }
 
-    void NextState()
+
+
+    #region Private Methods
+    //Initialization.
+    private void Initialize()
+    {
+        state = State.P1_Draw;
+    }
+    //Skip to the next State.
+    private void NextState()
     {
         string methodName = state.ToString() + "State";
         System.Reflection.MethodInfo info =
-            GetType().GetMethod(methodName, 
+            GetType().GetMethod(methodName,
             System.Reflection.BindingFlags.NonPublic |
             System.Reflection.BindingFlags.Instance);
         StartCoroutine((IEnumerator)info.Invoke(this, null));
     }
+    #endregion
 
     #region States
-    //Check the Exxhaust Status of unit. First Phase of a turn.
-    IEnumerator ExhaustToActiveState()
+
+    /// <summary>
+    /// Player 1
+    /// </summary>
+
+    //Exhaust Phase player 1
+    IEnumerator P1_ExhaustState()
     {
-        Debug.Log("ExhaustToActiveState: Enter");
-        while (state == State.ExhaustToActive)
+        Debug.Log("P1_ExhaustState: Enter");
+        while (state == State.P1_Exhaust)
         {
-            CheckExhaustStatus();
+            CheckExhaustStatus(1);
             yield return null;
         }
-        Debug.Log("ExhaustToActiveState: Exit");
-        CheckLethal();
-        NextState();
-    }
-    //Use this phase for any recurring Turn Start effects.
-    IEnumerator TurnStartState()
-    {
-        Debug.Log("TurnStartState: Enter");
-        while (state == State.TurnStart)
-        {
-            state = State.DrawAction;
-            yield return null;
-        }
-        Debug.Log("TurnStartState: Exit");
-        CheckLethal();
-        NextState();
-    }
-    //ALl the Drawing Action happens at this phase.
-    IEnumerator DrawActionState()
-    {
-        Debug.Log("DrawActionState: Enter");
-        while (state == State.DrawAction)
-        {
-            TriggerActionDraws();
-            yield return null;
-        }
-        Debug.Log("DrawActionState: Exit");
-        CheckLethal();
-        NextState();
-    }
-    //This is the players turn state. This will also be where we call the enemy AI decicions.
-    IEnumerator ExecuteState()
-    {
-        Debug.Log("ExecuteState: Enter");
-        while (state == State.Execute)
-        {
-            yield return null;
-        }
-        Debug.Log("ExecuteState: Exit");
-        CheckLethal();
-        NextState();
-    }
-    IEnumerator ActiveToExhaustState()
-    {
-        Debug.Log("ActiveToExhaustState: Enter");
-        while (state == State.ActiveToExhaust)
-        {
-            CheckActiveToExhaust();
-            yield return null;
-        }
-        Debug.Log("ActiveToExhaustState: Exit");
-        CheckLethal();
-        NextState();
-    }
-    IEnumerator EndTurnState()
-    {
-        Debug.Log("EndTurnState: Enter");
-        while (state == State.EndTurn)
-        {
-            state = State.ExhaustToActive;
-            yield return null;
-        }
-        Debug.Log("EndTurnState: Exit");
-        CheckLethal();
+        Debug.Log("P1_ExhaustState: Exit");
         NextState();
     }
 
-    IEnumerator WinState()
+    //Draw Phase Player 1
+    IEnumerator P1_DrawState()
     {
-        while (state == State.Win)
+        Debug.Log("P1_DrawState: Enter");
+        while (state == State.P1_Draw)
         {
+            //TODO: Call drawing function Here
             yield return null;
         }
+        Debug.Log("P1_DrawState: Exit");
+        NextState();
     }
 
-    IEnumerator LoseState()
+    //Player 1 play phase. (Play cards, attack, defend, etc..)
+    IEnumerator P1_PlayPhaseState()
     {
-        while (state == State.Lose)
+        Debug.Log("P1_PlayPhaseState: Enter");
+        while (state == State.P1_PlayPhase)
+        {            
+            //TODO: Listen for cards being play. -> go to sub phase of PlayPhaseAction
+            yield return null;
+        }
+        Debug.Log("P1_PlayPhaseState: Exit");
+        NextState();
+    }
+    //Sub Phase while action cards are played.
+    IEnumerator P1_PlayPhase_ActionState()
+    {
+        Debug.Log("P1_PlayPhase_ActionState: Enter");
+        while (state == State.P1_PlayPhase_Action)
+        {            
+            yield return null;
+        }
+        Debug.Log("P1_PlayPhase_ActionState: Exit");
+        NextState();
+    }
+    //End of player 1's turn.
+    IEnumerator P1_EndTurnState()
+    {
+        Debug.Log("P1_EndTurnState: Enter");
+        while (state == State.P1_EndTurn)
         {
             yield return null;
         }
+        Debug.Log("P1_EndTurnState: Exit");
+        NextState();
+    }
+    //Activation phase?
+    IEnumerator P1_ActivateState()
+    {
+        Debug.Log("P1_ActivateState: Enter");
+        while (state == State.P1_Activate)
+        {
+            //TODO: figure out what happens here.
+            yield return null;
+        }
+        Debug.Log("P1_ActivateState: Exit");
+        NextState();
+    }
+
+    /// <summary>
+    /// Player 2
+    /// </summary>
+
+    //Exhaust Phase player 2
+    IEnumerator P2_ExhaustState()
+    {
+        Debug.Log("P2_ExhaustState: Enter");
+        while (state == State.P2_Exhaust)
+        {
+            CheckExhaustStatus(2);
+            yield return null;
+        }
+        Debug.Log("P2_ExhaustState: Exit");
+        NextState();
+    }
+
+    //Draw Phase Player 2
+    IEnumerator P2_DrawState()
+    {
+        Debug.Log("P2_DrawState: Enter");
+        while (state == State.P2_Draw)
+        {
+            //TODO: Call drawing function Here
+            yield return null;
+        }
+        Debug.Log("P2_DrawState: Exit");
+        NextState();
+    }
+
+    //Player 2 play phase. (Play cards, attack, defend, etc..)
+    IEnumerator P2_PlayPhaseState()
+    {
+        Debug.Log("P2_PlayPhaseState: Enter");
+        while (state == State.P2_PlayPhase)
+        {
+            //TODO: Listen for cards being play. -> go to sub phase of PlayPhaseAction
+            yield return null;
+        }
+        Debug.Log("P2_PlayPhaseState: Exit");
+        NextState();
+    }
+    //Sub Phase while action cards are played.
+    IEnumerator P2_PlayPhase_ActionState()
+    {
+        Debug.Log("P2_PlayPhase_ActionState: Enter");
+        while (state == State.P2_PlayPhase_Action)
+        {
+            yield return null;
+        }
+        Debug.Log("P2_PlayPhase_ActionState: Exit");
+        NextState();
+    }
+    //End of player 2's turn.
+    IEnumerator P2_EndTurnState()
+    {
+        Debug.Log("P2_EndTurnState: Enter");
+        while (state == State.P2_EndTurn)
+        {
+            yield return null;
+        }
+        Debug.Log("P2_EndTurnState: Exit");
+        NextState();
+    }
+    //Activation phase?
+    IEnumerator P2_ActivateState()
+    {
+        Debug.Log("P1_ActivateState: Enter");
+        while (state == State.P2_Activate)
+        {
+            //TODO: figure out what happens here.
+            yield return null;
+        }
+        Debug.Log("P2_ActivateState: Exit");
+        NextState();
+    }
+
+    /// <summary>
+    /// GameOver
+    /// </summary>
+    /// 
+    IEnumerator GameOver_P1_WinState()
+    {
+        Debug.Log("GameOver_P1_WinState: Enter");
+        while (state == State.GameOver_P1_Win)
+        {
+            //TODO: end Game.
+            yield return null;
+        }
+        Debug.Log("GameOver_P1_WinState: Exit");
+    }
+    IEnumerator GameOver_P2_WinState()
+    {
+        Debug.Log("GameOver_P2_WinState: Enter");
+        while (state == State.GameOver_P2_Win)
+        {
+            //TODO: end Game.
+            yield return null;
+        }
+        Debug.Log("GameOver_P2_WinState: Exit");
+    }
+    IEnumerator GameOver_DrawState()
+    {
+        Debug.Log("GameOver_DrawState: Enter");
+        while (state == State.GameOver_Draw)
+        {
+            //TODO: end Game.
+            yield return null;
+        }
+        Debug.Log("GameOver_DrawState: Exit");
     }
 
     #endregion
 
     #region Events Called
-    void CheckExhaustStatus()
+    void CheckExhaustStatus(int player)
     {
-        foreach (Unit unit in P1_Units)
+        if (player == 1) // Player 1
         {
-            if(unit.GetComponent<UnitStats>().exhaustStateCount > 0)
+            foreach (Unit unit in P1_Units)
             {
-                Debug.Log("Reduce Exhaust Count");
-                unit.GetComponent<UnitStats>().exhaustStateCount--;
+                if (unit.GetComponent<UnitStats>().exhaustStateCount > 0)
+                {
+                    Debug.Log("Reduce Exhaust Count");
+                    unit.GetComponent<UnitStats>().exhaustStateCount--;
+                }
             }
+            state = State.P1_Draw;
+        }        
+        else // Player 2
+        {
+            foreach (Unit unit in P2_Units)
+            {
+                if (unit.GetComponent<UnitStats>().exhaustStateCount > 0)
+                {
+                    Debug.Log("Reduce Exhaust Count");
+                    unit.GetComponent<UnitStats>().exhaustStateCount--;
+                }
+            }
+            state = State.P2_Draw;
         }
         ResetToBaseStats();
-        state = State.TurnStart;
+       
     }
 
     void ResetToBaseStats()
@@ -208,13 +335,13 @@ public class BattleManager : MonoBehaviour {
             if (unit.GetComponent<UnitStats>().exhaustStateCount == 0)
                 unit.GetComponent<ActionManager>().DrawActions();
         }
-        state = State.Execute;
+        //state = State.Execute;
     }
 
 
     public void FinishExecuteState()
     {
-        state = State.ActiveToExhaust;
+        //state = State.ActiveToExhaust;
     }
 
     void CheckActiveToExhaust()
@@ -230,38 +357,30 @@ public class BattleManager : MonoBehaviour {
                 unit.GetComponent<ActionManager>().RestockStack();
             }
         }
-        state = State.EndTurn;
+        //state = State.EndTurn;
     }
+    //Call everytime a unit dies.
     public void CheckLethal()
     {
-        checkAlliesLethal = 0;
-        checkOpponentsLethal = 0;
-
+        bool p1_Dead = true;
+        bool p2_Dead = true;
         foreach (Unit unit in P1_Units)
         {
-            if (unit.GetComponent<UnitStats>().health <= 0)
+            if (unit.mHealth > 0)
             {
-                checkAlliesLethal++;
+                p1_Dead = false;
+
             }
-        }
-        if (checkAlliesLethal == P1_TeamSize)
-        {
-            Debug.Log("You lose");
-            state = State.Lose;
-        }
+        }       
 
         foreach (Unit unit in P2_Units)
         {
-            if (unit.GetComponent<UnitStats>().health <= 0)
+            if (unit.mHealth > 0)
             {
-                checkOpponentsLethal++;
+                p2_Dead = false;
             }
         }
-        if (checkOpponentsLethal == P2_TeamSize)
-        {
-            Debug.Log("You Win");
-            state = State.Win;
-        }
+       
     }
     #endregion
 
