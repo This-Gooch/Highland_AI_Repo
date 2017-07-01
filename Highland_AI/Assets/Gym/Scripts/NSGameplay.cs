@@ -27,6 +27,23 @@
             SET_EXHAUST = 256,
             DEBUG_LAST = 512
         }
+
+
+        /// <summary>
+        /// Priority of card.
+        ///     Once they called on a phase, what priority are they called in.
+        /// </summary>
+        public enum ECallPriority
+        {
+            NONE = 0,
+            Lowest = 1,
+            Medium = 2,
+            High = 3,
+            Highest = 4,
+            COUNT
+        }
+
+
         /// <summary>
         /// Types of cards.
         ///     Most types are set in the card's constructor.

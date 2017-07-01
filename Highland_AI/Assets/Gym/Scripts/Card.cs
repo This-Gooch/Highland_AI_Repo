@@ -43,7 +43,7 @@ public abstract class Card {
     //Te unique ID for the card.
     public CardKeys id;
 
-    //owning unit
+    //owning unit might be useless
     public Unit m_OwningUnit { get; set; }
 
     //Tooltip information (May move this outside of the class).
@@ -129,6 +129,9 @@ public class Passive : Card, IDuration
     /// Used as flags (START_TURN = 8, END_TURN = 128 -> so 136 = START_TURN & END_TURN)
     /// </summary>
     public ECallPhase m_CallPhase { get; protected set;/*Setting the call phase should never be done in code. should be set at card creation.*/ }
+
+    public ECallPriority m_Priority { get; protected set; }
+
     //How long does this effect lasts. If null = lasts for ever.
     public int? m_Duration { get; set; }
     //base duration
