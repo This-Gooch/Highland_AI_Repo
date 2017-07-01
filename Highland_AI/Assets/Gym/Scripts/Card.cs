@@ -2,6 +2,7 @@
 using NSGameplay.Cards;
 using System.Xml;
 using System.Xml.Serialization;
+using System;
 
 //XML root name in the file.
 [XmlRoot("CardList")]
@@ -95,6 +96,7 @@ public class Action : Card
 //Passive Card
 public class Passive : Card, IDuration
 {
+    //This will probably change has we may need different types.
     public Passive() { m_type = CardType.PassiveEffect; }
 
     public override void Play()
@@ -102,25 +104,24 @@ public class Passive : Card, IDuration
         //TODO: Implement play function for actions.
     }
 
-    public void Increment()
-    {
-        if (m_Duration != null)
-        {
-            ++m_Duration;
-        }
-    }
-
-    public void Decrement()
-    {
-        if (m_Duration != null)
-        {
-            --m_Duration;
-        }
-    }
-
     public void Reset()
     {
         m_Duration = m_StartingBaseDuration;
+    }
+
+    public void Increment(int modifier)
+    {
+        m_Duration += 1 * modifier;
+    }
+
+    public void SetDuration(int duration)
+    {
+        m_Duration = duration;
+    }
+
+    public void Decrement(int modifier)
+    {
+        m_Duration -= 1 * modifier;
     }
 
     /// <summary>

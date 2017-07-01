@@ -42,14 +42,3 @@ public static class Extension_Methods {
 
 
 }
-/// <summary>
-/// Interface that lets you increment decrement
-/// a duration value.
-/// </summary>
-interface IDuration
-{
-    void Increment();
-    void Decrement();
-
-    void Reset();
-}
