@@ -11,6 +11,9 @@ public class XMLDataSerializer
     [SerializeField]
     [Tooltip("DO NOT EDIT UNLESS INSTRUCTED.")]
     string unitsPath = "units.xml";
+    [SerializeField]
+    [Tooltip("DO NOT EDIT UNLESS INSTRUCTED.")]
+    string cardsPath = "cards.xml";
 
     //Saves new data from in editor unit creation.
     public void SaveUnits() 
@@ -62,10 +65,24 @@ public class XMLDataSerializer
         }
         fs.Close();
     }
-    //Loads card data.
+    //Loads card data into card library.
     public void LoadCards()
     {
+        if (!File.Exists(savedPath + cardsPath))
+        {
+            Debug.LogError("FILE " + savedPath + cardsPath + " NOT FOUND!");
+            return;
+        }
+        XmlSerializer serializer = new XmlSerializer(typeof(UnitList));
+        // To read the file, create a FileStream.
+        FileStream fs = new FileStream(savedPath + cardsPath, FileMode.Open);
+        // Call the Deserialize method and cast to the object type.
+        CardList loadedlist = (CardList)serializer.Deserialize(fs);
 
+        //Sends the list to Libraries to be loaded in.
+        Libaries.instance.Load_Card_Library(loadedlist.cardList);
+
+        fs.Close();
     }
 
 

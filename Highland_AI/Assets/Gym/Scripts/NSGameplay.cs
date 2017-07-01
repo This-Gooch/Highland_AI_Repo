@@ -2,7 +2,8 @@
 
     //Card/Action related namespace.
     namespace Cards
-    {
+    {   
+
         /// <summary>
         /// Call Phase flags:
         /// 
@@ -55,6 +56,49 @@
             public string description { get; private set; }
         }
 
+        public enum CardKeys
+        {
+            //////////////////////////////////////////////////////////////
+            ///Every cards will be listed here with a unique key.       //
+            ///Use card name as a naming convention (in Pascal Case).   //
+            ///Max value (int32) = 2147483647.                          //
+            ///Standard set (Cards available to all classes):           //
+            ///     reserved values:                                    //
+            ///         0 - 1000                                        //
+            /// Class 1:                                                //
+            ///     reserved values:                                    //
+            ///         2000 - 3000
+            /// Class 2:
+            ///     reserved values:
+            ///         4000 - 5000
+            /// Class 3:
+            ///     reserved values:
+            ///         6000 - 7000
+            /// Class 4:
+            ///     reserved values:
+            ///         8000 - 9000
+            /// Class 5:
+            ///     reserved values:
+            ///         10,000 - 11,000
+            /// Class 6:
+            ///     reserved values:
+            ///         12,000 - 13,000
+            /// Class 8:
+            ///     reserved values:
+            ///         14,000 - 15,000
+            /// 
+            //////////////////////////////////////////////////////////////
+
+            ///Standard Set
+            ///Card all units/classes can use in their decks.
+            ///Reversed from 0-
+            ///
+            ///
+
+            DirectAttack = 2147483647
+
+        }
+        
     }
 
     //State machine related namespace.

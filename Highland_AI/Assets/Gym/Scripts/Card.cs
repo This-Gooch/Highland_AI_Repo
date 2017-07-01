@@ -1,11 +1,46 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using NSGameplay.Cards;
+using System.Xml;
+using System.Xml.Serialization;
+
+//XML root name in the file.
+[XmlRoot("CardList")]
+// include type class Unit
+[XmlInclude(typeof(Card))]
+//Class holding a list of units. Used for storing and loading purposes.
+public class CardList
+{
+
+    [XmlArray("List")]
+    public List<Card> cardList = new List<Card>();
+
+    [XmlElement("Listname")]
+    public string Listname { get; set; }
+
+    // Constructor
+    public CardList() { }
+
+    public CardList(string name)
+    {
+        this.Listname = name;
+    }
+
+    public void Add(Card card)
+    {
+        cardList.Add(card);
+    }
+}
+
 /// <summary>
 /// Parent Class for all cards (Actions/Minion/Passives):
 /// Serializable because most likely will be saved as XML, JSON or other for ease of edit/mod.
 /// </summary>
 [System.Serializable]
+[XmlRoot("Card")]
 public abstract class Card {
+
+    //Te unique ID for the card.
+    public CardKeys id;
 
     //owning unit
     public Unit m_OwningUnit { get; set; }
@@ -53,7 +88,7 @@ public class Action : Card
 {   
     public override void Play()
     {
-        //TODO: implement play function for actions.
+        //TODO: Implement play function for actions.
     }   
 
 }
@@ -64,7 +99,7 @@ public class Passive : Card, IDuration
 
     public override void Play()
     {
-        //TODO: implement play function for actions.
+        //TODO: Implement play function for actions.
     }
 
     public void Increment()
