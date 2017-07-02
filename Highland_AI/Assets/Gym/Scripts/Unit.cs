@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Xml;
 using System.Xml.Serialization;
-
+using NSGameplay;
 //XML root name in the file.
 [XmlRoot("UnitList")]
 // include type class Unit
@@ -59,6 +59,7 @@ public class Unit : MonoBehaviour {
     #endregion
 
     #region Public members
+    public EUnitIDs id           { get; private set; }
     public int m_Health          { get; private set; }
     public int m_Defence         { get; set; }
     public int m_BaseDefence     { get; private set; }

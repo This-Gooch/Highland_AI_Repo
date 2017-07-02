@@ -1,4 +1,5 @@
-﻿using NSGameplay.Cards;
+﻿using NSGameplay;
+using NSGameplay.Cards;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +18,10 @@ public class Libaries : MonoBehaviour {
 
     //Repository of all cards data.
     //Images will be loaded seperatly from path.
-    private Dictionary<CardKeys, Card> Library = new Dictionary<CardKeys, Card>();
+    private Dictionary<ECardKeys, Card> Library = new Dictionary<ECardKeys, Card>();
+
+    //Repo for unit data.
+    private Dictionary<EUnitIDs, Unit> Barrack = new Dictionary<EUnitIDs, Unit>();
     
     //Loads the card library from file.
     public void Load_Card_Library (List<Card> list)
@@ -28,8 +32,17 @@ public class Libaries : MonoBehaviour {
         }
     }
 
+    //Loads the unit library from file.
+    public void Load_Unit_Library(List<Unit> list)
+    {
+        foreach (Unit c in list)
+        {
+            Barrack[c.id] = c;
+        }
+    }
+
     //Retreive a specific card from the library.
-    public Card GetCard(CardKeys key)
+    public Card GetCard(ECardKeys key)
     {
         return Library[key];
     }

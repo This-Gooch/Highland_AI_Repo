@@ -1,5 +1,18 @@
 ﻿namespace NSGameplay {
 
+    //Enum of units
+    public enum EUnitIDs
+    {
+        Debug = 0,
+        //Units from 1-99 are from class X
+        UnitX1 = 1,
+        UnitX2 = 2,
+        //Units from 100-199 are from class Y
+        UnitY1 = 100,
+        UnityY2 = 101
+        //Etc...
+    }
+
     //Card/Action related namespace.
     namespace Cards
     {   
@@ -48,7 +61,7 @@
         /// Types of cards.
         ///     Most types are set in the card's constructor.
         /// </summary>
-        public enum CardType
+        public enum ECardType
         {
             NULL,
             DEBUG,
@@ -73,7 +86,7 @@
             public string description { get; private set; }
         }
 
-        public enum CardKeys
+        public enum ECardKeys
         {
             //////////////////////////////////////////////////////////////
             ///Every cards will be listed here with a unique key.       //
@@ -218,4 +231,6 @@
             //Draw_To_Play
         }
     }
+
+
 }

@@ -41,7 +41,7 @@ public class CardList
 public abstract class Card {
 
     //Te unique ID for the card.
-    public CardKeys id;
+    public ECardKeys id;
 
     //owning unit might be useless
     public Unit m_OwningUnit { get; set; }
@@ -49,7 +49,7 @@ public abstract class Card {
     //Tooltip information (May move this outside of the class).
     public Tooltip m_Tooltip;
     //Type of card. Once played it will trigger differently.
-    public CardType m_type { get; protected set; }
+    public ECardType m_type { get; protected set; }
     //Name of the card
     public string m_Name { get; private set; }
     //Cost for using the card.
@@ -67,7 +67,7 @@ public abstract class Card {
 //Minion
 public class Minion: Card
 {
-    public Minion() { m_type = CardType.Minion; }
+    public Minion() { m_type = ECardType.Minion; }
 
 
     public int m_Health { get; private set; }
@@ -97,7 +97,7 @@ public class Action : Card
 public class Passive : Card, IDuration
 {
     //This will probably change has we may need different types.
-    public Passive() { m_type = CardType.PassiveEffect; }
+    public Passive() { m_type = ECardType.PassiveEffect; }
 
     public override void Play()
     {
