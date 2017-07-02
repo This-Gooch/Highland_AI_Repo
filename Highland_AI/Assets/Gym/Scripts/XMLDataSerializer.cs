@@ -2,58 +2,34 @@
 using System.Xml.Serialization;
 using System.IO;
 
-public class XMLDataSerializer
+public static class XMLDataSerializer
 {
-
-    [SerializeField]
-    [Tooltip("DO NOT EDIT UNLESS INSTRUCTED.")]
-    string savedPath = "Assets/Data/";
-    [SerializeField]
-    [Tooltip("DO NOT EDIT UNLESS INSTRUCTED.")]
-    string unitsPath = "units.xml";
-    [SerializeField]
-    [Tooltip("DO NOT EDIT UNLESS INSTRUCTED.")]
-    string cardsPath = "cards.xml";
-
     //Saves new data from in editor unit creation.
-    public void SaveUnits() 
-    {
-        //TODO: implement in editor unit creation.
-        UnitList newList = new UnitList("main");
-
-        /*//TODO: add units to save.
-        if (SomedataStorage.unitLists.Count != 0)
-        {
-            for (int i = 0; i < SomedataStorage.unitLists.Count; i++)
-            {
-                newList.Add(SomedataStorage.unitLists[i]);
-            }
-        }*/
-
+    public static void SaveUnits(UnitList newList, string path) 
+    {   
         System.Type[] unit = { typeof(Unit) };
         XmlSerializer serializer = new XmlSerializer(typeof(UnitList), unit);
-        FileStream fs = new FileStream(savedPath + unitsPath, FileMode.Create);
+        FileStream fs = new FileStream(path, FileMode.Create);
         serializer.Serialize(fs, newList);
         fs.Close();
-        newList = null;
     }
     //Saves new data from in editor card creation.
-    public void SaveCards()
+    public static void SaveCards()
     {
         //TODO: implement in editor card creation.
     }
 
     //Loads Unit data.
-    public void LoadUnits()
+    public static void LoadUnits(string path)
     {
-        if (!File.Exists(savedPath + unitsPath))
+        if (!File.Exists(path))
         {
-            Debug.LogError("FILE " + savedPath + unitsPath + " NOT FOUND!");
+            Debug.LogError("FILE " + path + " NOT FOUND!");
             return;
         }
         XmlSerializer serializer = new XmlSerializer(typeof(UnitList));
         // To read the file, create a FileStream.
-        FileStream fs = new FileStream(savedPath + unitsPath, FileMode.Open);
+        FileStream fs = new FileStream(path, FileMode.Open);
         // Call the Deserialize method and cast to the object type.
         UnitList loadedlist = (UnitList)serializer.Deserialize(fs);
        
@@ -66,16 +42,16 @@ public class XMLDataSerializer
         fs.Close();
     }
     //Loads card data into card library.
-    public void LoadCards()
+    public static void LoadCards(string path)
     {
-        if (!File.Exists(savedPath + cardsPath))
+        if (!File.Exists(path))
         {
-            Debug.LogError("FILE " + savedPath + cardsPath + " NOT FOUND!");
+            Debug.LogError("FILE " + path + " NOT FOUND!");
             return;
         }
         XmlSerializer serializer = new XmlSerializer(typeof(UnitList));
         // To read the file, create a FileStream.
-        FileStream fs = new FileStream(savedPath + cardsPath, FileMode.Open);
+        FileStream fs = new FileStream(path, FileMode.Open);
         // Call the Deserialize method and cast to the object type.
         CardList loadedlist = (CardList)serializer.Deserialize(fs);
 
