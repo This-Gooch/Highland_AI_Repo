@@ -12,11 +12,12 @@ using NSGameplay;
 public class CardList
 {
 
-    [XmlArray("List")]
-    public List<Card> cardList = new List<Card>();
-
     [XmlElement("Listname")]
     public string Listname { get; set; }
+
+    [XmlArray("List"), XmlArrayItem(ElementName = "Card", Type = typeof(Card))]
+    public List<Card> cardList = new List<Card>();
+    
 
     // Constructor
     public CardList() { }
@@ -46,23 +47,23 @@ public abstract class Card {
     public ECardKeys id { get; set; }
 
     //owning unit might be useless
-    public EUnitIDs m_OwningUnit { get; set; }
+    public EUnitIDs owningUnit { get; set; }
 
     //Tooltip information (May move this outside of the class).
-    public Tooltip m_Tooltip { get; set; }
+    public Tooltip tooltip { get; set; }
     //Type of card. Once played it will trigger differently.
-    public ECardType m_type { get; set; }
+    public ECardType type { get; set; }
     //Name of the card
-    public string m_Name { get; set; }
+    public string name { get; set; }
     //Cost for using the card.
-    public int m_Cost { get; set; }
+    public int cost { get; set; }
     //Needs to be implemented in the child class.
     public abstract void Play();
     
     public virtual int Burn()
     {   //Burn utility recovered bonus is half the cost rounded down with 1 being the minimum.
         //This is virtual so the cost/implementation can be changed in the child class.
-        return (m_Cost / 2) > 0 ? (m_Cost / 2) : 1;
+        return (cost / 2) > 0 ? (cost / 2) : 1;
     }
 
    
@@ -73,17 +74,17 @@ public abstract class Card {
 [XmlRoot("Minion")]
 public class Minion: Card
 {
-    public Minion() { m_type = ECardType.Minion; }
+    public Minion() { type = ECardType.Minion; }
 
 
-    public int m_Health { get; set; }
-    public int m_Defence { get; set; }
-    public int m_BaseDefence { get; set; }
-    public int m_Attack { get; set; }
-    public int m_Utility { get; set; }
-    public bool m_Exhausted { get; set; }
-    public int m_OwningPlayer { get; private set; }
-    public string m_PortraitImagePath { get; set; }
+    public int health { get; set; }
+    public int defence { get; set; }
+    public int baseDefence { get; set; }
+    public int attack { get; set; }
+    public int utility { get; set; }
+    public bool exhausted { get; set; }
+    public int owningPlayer { get; private set; }
+    public string portraitPath { get; set; }
 
     public override void Play()
     {
@@ -107,7 +108,7 @@ public class Action : Card
 public class Passive : Card, IDuration
 {
     //This will probably change has we may need different types.
-    public Passive() { m_type = ECardType.PassiveEffect; }
+    public Passive() { type = ECardType.PassiveEffect; }
 
     public override void Play()
     {

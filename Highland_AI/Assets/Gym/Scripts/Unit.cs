@@ -11,12 +11,13 @@ using NSGameplay;
 //Class holding a list of units. Used for storing and loading purposes.
 public class UnitList       
 {
-    
-    [XmlArray("List")]
-    public List<UnitInfo> unitList = new List<UnitInfo>();
 
     [XmlElement("Listname")]
     public string Listname { get; set; }
+
+    [XmlArray("List"), XmlArrayItem(ElementName = "Unit", Type = typeof(UnitInfo))]
+    public List<UnitInfo> unitList = new List<UnitInfo>();
+
 
     // Constructor
     public UnitList() { }

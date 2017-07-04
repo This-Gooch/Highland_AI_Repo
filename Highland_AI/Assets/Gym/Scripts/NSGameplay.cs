@@ -133,7 +133,8 @@
             DirectAttack = 0,
             Guard = 100,
 
-            ShuffleDeck = 200
+            ShuffleDeck = 200,
+            BasicMinion = 300
 
             ///********************************************************///
             /// Class 1 Set                                            ///

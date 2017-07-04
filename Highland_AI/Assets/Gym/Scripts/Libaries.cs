@@ -38,7 +38,8 @@ public class Libaries : MonoBehaviour {
         foreach (Card c in list)
         {
             Library_Card[c.id] = c;
-        }
+            Debug.Log("Loading : " + c.name );
+        }        
     }    
 
     //Loads the unit library from file.
@@ -47,6 +48,7 @@ public class Libaries : MonoBehaviour {
         foreach (UnitInfo c in list)
         {
             Library_Unit[c.id] = c;
+            Debug.Log("Loading : " + c.name);
         }
     }
 

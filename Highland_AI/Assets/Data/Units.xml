@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<UnitList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <List>
+    <Unit>
+      <id>UnitX1</id>
+      <health>100</health>
+      <defence>5</defence>
+      <baseDefence>5</baseDefence>
+      <attack>10</attack>
+      <utility>1</utility>
+      <exhausted>false</exhausted>
+      <owningPlayer>0</owningPlayer>
+      <name>The first unit's name</name>
+      <portraitPath>Units/Portraits/main</portraitPath>
+    </Unit>
+  </List>
+  <Listname>main</Listname>
+</UnitList>
