@@ -3,9 +3,9 @@ using NSGameplay.Cards;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Libaries : MonoBehaviour {
+public class Libraries : MonoBehaviour {
 
-    public static Libaries instance;
+    public static Libraries instance;
 
     [SerializeField]
     [Tooltip("Full path location of the cards library file.")]
@@ -102,6 +102,10 @@ public class Libaries : MonoBehaviour {
     {
         return Library_Card[key];
     }
-
+    //Retreive a specific Unit from the library.
+    public UnitInfo GetUnit(EUnitIDs key)
+    {
+        return Library_Unit[key];
+    }
 
 }

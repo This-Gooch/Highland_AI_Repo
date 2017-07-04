@@ -40,7 +40,7 @@ public static class XMLDataSerializer
         UnitList loadedlist = (UnitList)serializer.Deserialize(fs);
 
         //Sends the data to libraries for loading.
-        Libaries.instance.Load_Unit_Library(loadedlist.unitList);
+        Libraries.instance.Load_Unit_Library(loadedlist.unitList);
 
         fs.Close();
     }
@@ -59,7 +59,7 @@ public static class XMLDataSerializer
         CardList loadedlist = (CardList)serializer.Deserialize(fs);
 
         //Sends the list to Libraries to be loaded in.
-        Libaries.instance.Load_Card_Library(loadedlist.cardList);
+        Libraries.instance.Load_Card_Library(loadedlist.cardList);
 
         fs.Close();
     }
