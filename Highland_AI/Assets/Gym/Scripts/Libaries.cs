@@ -30,7 +30,7 @@ public class Libaries : MonoBehaviour {
     private Dictionary<ECardKeys, Card> Library_Card = new Dictionary<ECardKeys, Card>();
 
     //Repo for unit data.
-    private Dictionary<EUnitIDs, Unit> Library_Unit = new Dictionary<EUnitIDs, Unit>();
+    private Dictionary<EUnitIDs, UnitInfo> Library_Unit = new Dictionary<EUnitIDs, UnitInfo>();
     
     //Loads the card library from file.
     public void Load_Card_Library (List<Card> list)
@@ -42,9 +42,9 @@ public class Libaries : MonoBehaviour {
     }    
 
     //Loads the unit library from file.
-    public void Load_Unit_Library(List<Unit> list)
+    public void Load_Unit_Library(List<UnitInfo> list)
     {
-        foreach (Unit c in list)
+        foreach (UnitInfo c in list)
         {
             Library_Unit[c.id] = c;
         }
@@ -69,7 +69,7 @@ public class Libaries : MonoBehaviour {
     }
 
     //Add or update and a Unit entry.
-    public bool Save_Unit_Local(Unit u)
+    public bool Save_Unit_Local(UnitInfo u)
     {
         bool IsNewEntry = false;
         if (Library_Unit[u.id] == null)
@@ -85,7 +85,7 @@ public class Libaries : MonoBehaviour {
     {
         int count = 0;
         UnitList list = new UnitList("main");
-        foreach (KeyValuePair<EUnitIDs, Unit> u in Library_Unit)
+        foreach (KeyValuePair<EUnitIDs, UnitInfo> u in Library_Unit)
         {
             list.unitList.Add(u.Value);
             ++count;

@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <CardList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <List>
-    <Card xsi:type="Action">
+    <Card xsi:type="Minion">
       <id>DirectAttack</id>
       <m_OwningUnit>Debug</m_OwningUnit>
-      <m_type>NULL</m_type>
-      <m_Cost>0</m_Cost>
+      <m_Tooltip>
+        <image_Path>path of an image</image_Path>
+        <title>Title of tooltip</title>
+        <description>The description.</description>
+      </m_Tooltip>
+      <m_type>Minion</m_type>
+      <m_Name>DirectAttack</m_Name>
+      <m_Cost>2</m_Cost>
+      <m_Health>20</m_Health>
+      <m_Defence>2</m_Defence>
+      <m_BaseDefence>2</m_BaseDefence>
+      <m_Attack>4</m_Attack>
+      <m_Utility>0</m_Utility>
+      <m_Exhausted>false</m_Exhausted>
+      <m_OwningPlayer>0</m_OwningPlayer>
     </Card>
   </List>
   <Listname>main</Listname>

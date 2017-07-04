@@ -7,13 +7,13 @@ using NSGameplay;
 //XML root name in the file.
 [XmlRoot("UnitList")]
 // include type class Unit
-[XmlInclude(typeof(Unit))] 
+[XmlInclude(typeof(UnitInfo))] 
 //Class holding a list of units. Used for storing and loading purposes.
 public class UnitList       
 {
     
     [XmlArray("List")]
-    public List<Unit> unitList = new List<Unit>();
+    public List<UnitInfo> unitList = new List<UnitInfo>();
 
     [XmlElement("Listname")]
     public string Listname { get; set; }
@@ -26,13 +26,41 @@ public class UnitList
         this.Listname = name;
     }
 
-    public void Add(Unit unit)
+    public void Add(UnitInfo unit)
     {
         unitList.Add(unit);
     }
 }
 [System.Serializable]
 [XmlRoot("Unit")]
+public class UnitInfo
+{
+    //Default constructor
+    public UnitInfo() { }
+    //Main constructor
+    public UnitInfo(int health, int defence, int attack, int utility, string name, string portraitPath)
+    {
+        this.health = health;
+        this.attack = attack;
+        this.baseDefence = defence;
+        this.defence = defence;
+        this.utility = utility;
+        this.name = name;
+        this.portraitPath = portraitPath;
+        exhausted = false;
+    }
+
+    public EUnitIDs id { get; set; }
+    public int health { get; set; }
+    public int defence { get; set; }
+    public int baseDefence { get; set; }
+    public int attack { get; set; }
+    public int utility { get; set; }
+    public bool exhausted { get; set; }
+    public int owningPlayer { get; set; }
+    public string name { get; set; }
+    public string portraitPath { get; set; }
+}
 public class Unit : MonoBehaviour {
 
     #region Editor references
@@ -59,15 +87,7 @@ public class Unit : MonoBehaviour {
     #endregion
 
     #region Public members
-    public EUnitIDs id           { get; private set; }
-    public int m_Health          { get; private set; }
-    public int m_Defence         { get; set; }
-    public int m_BaseDefence     { get; private set; }
-    public int m_Attack          { get; private set; }
-    public int m_Utility         { get; private set; }
-    public bool m_Exhausted      { get; private set; }
-    public int m_OwningPlayer    { get; private set; }
-    public string m_Name         { get; private set; }
+    public UnitInfo info;
     //Card in hand for the unit.
     public List<Card> m_Hand = new List<Card>();
 
@@ -78,18 +98,7 @@ public class Unit : MonoBehaviour {
     private string m_PortraitImagePath = "Units/Portraits/main";
 
     #endregion
-    //Default constructor
-    public Unit() { }
-    //Main constructor
-    public Unit(int health, int defence, int attack, int utility, string name, string portraitPath)
-    {
-        m_Health = health;
-        m_Attack = attack;
-        m_BaseDefence = defence;
-        m_Utility = utility;
-        m_Name = name;
-        m_PortraitImagePath = portraitPath;
-    }
+
 
     private void Awake()
     {
@@ -102,16 +111,16 @@ public class Unit : MonoBehaviour {
         //This is mostly an example of usage at the momment.
         EventHandler_Gameplay.OnUnitSpawn += this.NewUnitCreated;
         EventHandler_Gameplay.OnUnitDestroyed += this.OnUnitDestroy;
-        if (m_OwningPlayer == 1)
+        if (info.owningPlayer == 1)
         {
             EventHandler_Gameplay.OnPlayer1TurnBegin += this.OnTurnBegin;
         }
-        else if (m_OwningPlayer == 2)
+        else if (info.owningPlayer == 2)
         {
             EventHandler_Gameplay.OnPlayer2TurnBegin += this.OnTurnBegin;
         }
         //Trigger new unit created.
-        EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.m_OwningPlayer);
+        EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.info.owningPlayer);
 
         Register();
     }
@@ -145,18 +154,18 @@ public class Unit : MonoBehaviour {
     {
         /*Debug init. Real value should come from file*/
         //TODO: Load unit data from file
-        m_Health = 100;
-        m_Attack = 10;
-        m_BaseDefence = 5;
-        m_Utility = 2;
-        m_Name = "The Name";
+        info.health = 100;
+        info.attack = 10;
+        info.baseDefence = 5;
+        info.utility = 2;
+        info.name = "The Name";
         ////////////////////
 
         _Portrait.sprite = Resources.Load<Sprite>(m_PortraitImagePath) as Sprite;
-        _Name.text = m_Name;
-        m_Exhausted = false;
-        m_OwningPlayer = _Player;
-        m_Defence = m_BaseDefence;
+        _Name.text = info.name;
+        info.exhausted = false;
+        info.owningPlayer = _Player;
+        info.defence = info.baseDefence;
         UpdateUI();
     }
 
@@ -168,10 +177,10 @@ public class Unit : MonoBehaviour {
 
     private void UpdateUI()
     {
-        _Health.text = m_Health.ToString();
-        _Defence.text = m_Defence.ToString();
-        _Attack.text = m_Attack.ToString();
-        _Utility.text = m_Utility.ToString();
+        _Health.text = info.health.ToString();
+        _Defence.text = info.defence.ToString();
+        _Attack.text = info.attack.ToString();
+        _Utility.text = info.utility.ToString();
         
     }
 
@@ -181,7 +190,7 @@ public class Unit : MonoBehaviour {
     public void KillUnit()
     {
         //Trigger unit death
-        EventHandler_Gameplay.OnUnitDead(this.gameObject, this.m_OwningPlayer);
+        EventHandler_Gameplay.OnUnitDead(this.gameObject, this.info.owningPlayer);
     }
     //Implementation of the event.
     private void OnUnitDestroy(GameObject unit, int player)
@@ -198,8 +207,8 @@ public class Unit : MonoBehaviour {
     //Reset the unit's stats at the start of turn.
     private void OnTurnBegin(GameObject unit, int player)
     {
-        Debug.Log("OnTurnBegin:" + gameObject.name + ". From player " + m_OwningPlayer);
-        m_Defence = m_BaseDefence;
+        Debug.Log("OnTurnBegin:" + gameObject.name + ". From player " + info.owningPlayer);
+        info.defence = info.baseDefence;
     }
 
     #endregion

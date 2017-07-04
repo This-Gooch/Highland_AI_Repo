@@ -7,7 +7,7 @@ public static class XMLDataSerializer
     //Saves new data from in editor unit creation.
     public static void SaveUnits(UnitList newList, string path) 
     {   
-        System.Type[] unit = { typeof(Unit) };
+        System.Type[] unit = { typeof(UnitInfo) };
         XmlSerializer serializer = new XmlSerializer(typeof(UnitList), unit);
         FileStream fs = new FileStream(path, FileMode.Create);
         serializer.Serialize(fs, newList);

@@ -79,11 +79,11 @@
         public class Tooltip
         {
             //Path in the resource folder.
-            public string image_Path { get; private set; }
+            public string image_Path { get; set; }
             //Title or name of the popup tooltip.
-            public string title { get; private set; }
+            public string title { get; set; }
             //Main information displayed.
-            public string description { get; private set; }
+            public string description { get; set; }
         }
 
         public enum ECardKeys

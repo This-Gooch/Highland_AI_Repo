@@ -85,7 +85,7 @@ public class BattleManager : MonoBehaviour {
         bool p2_Dead = true;
         foreach (Unit unit in P1_Units)
         {
-            if (unit.m_Health > 0)
+            if (unit.info.health > 0)
             {
                 p1_Dead = false;
             }
@@ -93,7 +93,7 @@ public class BattleManager : MonoBehaviour {
 
         foreach (Unit unit in P2_Units)
         {
-            if (unit.m_Health > 0)
+            if (unit.info.health > 0)
             {
                 p2_Dead = false;
             }
@@ -122,12 +122,12 @@ public class BattleManager : MonoBehaviour {
     {
         if (u != null)
         {
-            if (u.m_OwningPlayer == 1)
+            if (u.info.owningPlayer == 1)
             {
                 P1_Units.Add(u);
                 return true;
             }
-            else if (u.m_OwningPlayer == 2)
+            else if (u.info.owningPlayer == 2)
             {
                 P2_Units.Add(u);
                 return true;
@@ -348,7 +348,7 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (Unit unit in P1_Units)
             {
-                if (unit.m_Exhausted)
+                if (unit.info.exhausted)
                 {
                     Debug.Log("Unit is exhausted");
                 }
@@ -359,7 +359,7 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (Unit unit in P2_Units)
             {
-                if (unit.m_Exhausted)
+                if (unit.info.exhausted)
                 {
                     Debug.Log("Unit is exhausted");
                 }

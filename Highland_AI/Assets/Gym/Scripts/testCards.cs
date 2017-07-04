@@ -23,16 +23,19 @@ public class testCards : MonoBehaviour {
 
     private void CreateNewCard()
     {
-        Card c = new Action();
+        Minion c = new Minion();
         c.id = NSGameplay.Cards.ECardKeys.DirectAttack;
-        /*c.m_Cost = 2;
+        c.m_Cost = 2;
         c.m_Name = c.id.ToString();
         c.m_Tooltip = new NSGameplay.Cards.Tooltip();
+        c.m_Tooltip.description = "The description.";
+        c.m_Tooltip.title = "Title of tooltip";
+        c.m_Tooltip.image_Path = "path of an image";
         c.m_Attack = 4;
         c.m_BaseDefence = 2;
         c.m_Defence = 2;
         c.m_Health = 20;
-        c.m_Utility = 0;*/
+        c.m_Utility = 0;
 
         CardList cl= new CardList("main");
         cl.cardList.Add(c);

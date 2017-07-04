@@ -49,7 +49,7 @@ public abstract class Card {
     public EUnitIDs m_OwningUnit { get; set; }
 
     //Tooltip information (May move this outside of the class).
-    public Tooltip m_Tooltip;
+    public Tooltip m_Tooltip { get; set; }
     //Type of card. Once played it will trigger differently.
     public ECardType m_type { get; set; }
     //Name of the card
@@ -83,7 +83,7 @@ public class Minion: Card
     public int m_Utility { get; set; }
     public bool m_Exhausted { get; set; }
     public int m_OwningPlayer { get; private set; }
-    private string m_PortraitImagePath;
+    public string m_PortraitImagePath { get; set; }
 
     public override void Play()
     {
