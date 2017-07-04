@@ -2,7 +2,7 @@
 using NSGameplay.Cards;
 using System.Xml;
 using System.Xml.Serialization;
-using System;
+using NSGameplay;
 
 //XML root name in the file.
 [XmlRoot("CardList")]
@@ -30,6 +30,8 @@ public class CardList
     {
         cardList.Add(card);
     }
+
+   
 }
 
 /// <summary>
@@ -41,10 +43,10 @@ public class CardList
 public abstract class Card {
 
     //Te unique ID for the card.
-    public ECardKeys id;
+    public ECardKeys id { get; set; }
 
     //owning unit might be useless
-    public Unit m_OwningUnit { get; set; }
+    public EUnitIDs m_OwningUnit { get; set; }
 
     //Tooltip information (May move this outside of the class).
     public Tooltip m_Tooltip;
@@ -63,8 +65,12 @@ public abstract class Card {
         return (m_Cost / 2) > 0 ? (m_Cost / 2) : 1;
     }
 
+   
+
 }
 //Minion
+[System.Serializable]
+[XmlRoot("Minion")]
 public class Minion: Card
 {
     public Minion() { m_type = ECardType.Minion; }
@@ -85,6 +91,8 @@ public class Minion: Card
     }
 }
 //Actions
+[System.Serializable]
+[XmlRoot("Action")]
 public class Action : Card
 {   
     public override void Play()
@@ -94,6 +102,8 @@ public class Action : Card
 
 }
 //Passive Card
+[System.Serializable]
+[XmlRoot("Passive")]
 public class Passive : Card, IDuration
 {
     //This will probably change has we may need different types.

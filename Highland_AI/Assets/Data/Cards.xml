@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<CardList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <List>
+    <Card xsi:type="Action">
+      <id>DirectAttack</id>
+      <m_OwningUnit>Debug</m_OwningUnit>
+      <m_type>NULL</m_type>
+      <m_Cost>0</m_Cost>
+    </Card>
+  </List>
+  <Listname>main</Listname>
+</CardList>

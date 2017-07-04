@@ -2480,6 +2480,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1641366972}
+  - component: {fileID: 1641366973}
   m_Layer: 0
   m_Name: DataManager
   m_TagString: Untagged
@@ -2500,6 +2501,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1641366973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1641366971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8aa1a8fb82924d4ba7b3f2fb8afb766, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1656361386
 GameObject:
   m_ObjectHideFlags: 0
@@ -2628,6 +2640,7 @@ MonoBehaviour:
   activeAction: {fileID: 0}
   deckLoc: {fileID: 0}
   discardLoc: {fileID: 0}
+  m_ActivePassives: []
 --- !u!4 &1657802941
 Transform:
   m_ObjectHideFlags: 0
@@ -2992,22 +3005,22 @@ Prefab:
     - target: {fileID: 224379229660103360, guid: ac830cc608828a04a8749b6ef34827a7,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 224379229660103360, guid: ac830cc608828a04a8749b6ef34827a7,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224786601090703466, guid: ac830cc608828a04a8749b6ef34827a7,
         type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.85
       objectReference: {fileID: 0}
     - target: {fileID: 224786601090703466, guid: ac830cc608828a04a8749b6ef34827a7,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ac830cc608828a04a8749b6ef34827a7, type: 2}

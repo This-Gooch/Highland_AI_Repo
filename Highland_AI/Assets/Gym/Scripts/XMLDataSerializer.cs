@@ -14,9 +14,15 @@ public static class XMLDataSerializer
         fs.Close();
     }
     //Saves new data from in editor card creation.
-    public static void SaveCards()
+    public static void SaveCards(CardList newList, string path)
     {
-        //TODO: implement in editor card creation.
+       
+
+        System.Type[] card = { typeof(Card), typeof(Minion), typeof(Action), typeof(Passive) };
+        XmlSerializer serializer = new XmlSerializer(typeof(CardList), card);
+        FileStream fs = new FileStream(path, FileMode.Create);
+        serializer.Serialize(fs, newList);
+        fs.Close();
     }
 
     //Loads Unit data.
