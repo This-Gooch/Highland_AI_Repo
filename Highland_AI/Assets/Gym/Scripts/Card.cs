@@ -49,11 +49,11 @@ public abstract class Card {
     //Tooltip information (May move this outside of the class).
     public Tooltip m_Tooltip;
     //Type of card. Once played it will trigger differently.
-    public ECardType m_type { get; protected set; }
+    public ECardType m_type { get; set; }
     //Name of the card
-    public string m_Name { get; private set; }
+    public string m_Name { get; set; }
     //Cost for using the card.
-    public int m_Cost { get; protected set; }
+    public int m_Cost { get; set; }
     //Needs to be implemented in the child class.
     public abstract void Play();
     
@@ -70,12 +70,12 @@ public class Minion: Card
     public Minion() { m_type = ECardType.Minion; }
 
 
-    public int m_Health { get; private set; }
+    public int m_Health { get; set; }
     public int m_Defence { get; set; }
-    public int m_BaseDefence { get; private set; }
-    public int m_Attack { get; private set; }
-    public int m_Utility { get; private set; }
-    public bool m_Exhausted { get; private set; }
+    public int m_BaseDefence { get; set; }
+    public int m_Attack { get; set; }
+    public int m_Utility { get; set; }
+    public bool m_Exhausted { get; set; }
     public int m_OwningPlayer { get; private set; }
     private string m_PortraitImagePath;
 

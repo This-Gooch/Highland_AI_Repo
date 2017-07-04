@@ -24,6 +24,10 @@ public class testCards : MonoBehaviour {
     private void CreateNewCard()
     {
         Card c = new Minion();
+        c.id = NSGameplay.Cards.ECardKeys.DirectAttack;
+        c.m_Cost = 2;
+        c.m_Name = c.id.ToString();
+                
     }
 
     private void CreateNewUnit()
