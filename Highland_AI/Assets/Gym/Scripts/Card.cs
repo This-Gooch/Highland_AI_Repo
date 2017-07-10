@@ -96,6 +96,18 @@ public class Minion: Card
 [XmlRoot("Action")]
 public class Action : Card
 {   
+
+    public int damageOut { get; set; }
+    public int healOut { get; set; }
+    public int damageIn { get; set; }
+    public int healIn { get; set; }
+    public int armorUpIn { get; set; }
+    public int armorDownIn { get; set; }
+    public int armorUpOut { get; set; }
+    public int armorDownOut { get; set; }
+    public int owningPlayer { get; private set; }
+    public string portraitPath { get; set; }
+
     public override void Play()
     {
         //TODO: Implement play function for actions.

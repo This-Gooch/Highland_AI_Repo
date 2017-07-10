@@ -59,6 +59,7 @@ public class Libraries : MonoBehaviour {
         if (Library_Card[c.id] == null)
         {
             IsNewEntry = true;
+            Debug.Log("Card is a new entry");
         }
         Library_Card[c.id] = c;
         return IsNewEntry;

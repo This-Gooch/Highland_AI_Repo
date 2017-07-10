@@ -131,6 +131,12 @@
             ///********************************************************///
 
             DirectAttack = 0,
+
+            TestCardOne = 1,
+            TestCardTwo = 2,
+            TestCardThree = 3,
+
+            
             Guard = 100,
 
             ShuffleDeck = 200,
