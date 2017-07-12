@@ -42,13 +42,13 @@ public class testCards : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.M))//Tests fetching a card from the library
         {
-            Card t = Libraries.instance.GetCard(NSGameplay.Cards.ECardKeys.BasicMinion) ?? new Minion();
+            Card t = Libraries.instance.GetCard("Minion") ?? new Minion();
             Debug.Log(t.name);
         }
 
         if (Input.GetKeyDown(KeyCode.N))//tests fetching a unitInfo from the library
         {
-            UnitInfo u = Libraries.instance.GetUnit(NSGameplay.EUnitIDs.UnitX1) ?? new UnitInfo();
+            UnitInfo u = Libraries.instance.GetUnit("HunterClassGuy") ?? new UnitInfo();
             Debug.Log(u.name);
         }
     }
@@ -56,7 +56,7 @@ public class testCards : MonoBehaviour {
     private void CreateNewCardToLibrary()
     {
         Minion c = new Minion();
-        c.id = NSGameplay.Cards.ECardKeys.BasicMinion;
+        c.id = "Minion";
         c.cost = 2;
         c.name = c.id.ToString();
         c.tooltip = new NSGameplay.Cards.Tooltip();
@@ -78,7 +78,7 @@ public class testCards : MonoBehaviour {
     private void CreateNewUnitToLibrary()
     {
         UnitInfo u = new UnitInfo(100, 5, 10, 1, "The first unit's name", "Units/Portraits/main");
-        u.id = NSGameplay.EUnitIDs.UnitX1;
+        u.id = "Hunter";
 
         //Saves the Unit into the library
         Libraries.instance.Save_Unit_Local(u);
@@ -89,7 +89,7 @@ public class testCards : MonoBehaviour {
     private void CreateNewCard()
     {
         Minion c = new Minion();
-        c.id = NSGameplay.Cards.ECardKeys.BasicMinion;
+        c.id = "Minion";
         c.cost = 2;
         c.name = c.id.ToString();
         c.tooltip = new NSGameplay.Cards.Tooltip();
@@ -110,7 +110,7 @@ public class testCards : MonoBehaviour {
     private void CreateNewUnit()
     {
         UnitInfo u = new UnitInfo( 100, 5,10,1,"The first unit's name", "Units/Portraits/main");
-        u.id = NSGameplay.EUnitIDs.UnitX1;
+        u.id = "Hunter";
         UnitList ul = new UnitList("main");
         ul.Add(u);
         XMLDataSerializer.SaveUnits(ul, "Assets/Data/Units.xml");

@@ -200,7 +200,7 @@ public class TheLibrarian : EditorWindow {
         {
             case 0:
                 Action act = new Action();
-                act.id = NSGameplay.Cards.ECardKeys.TestCardOne;
+                act.id = "Test card One";
                 act.type = NSGameplay.Cards.ECardType.Instant;
                 act.cost = utilityCost;
                 act.name = cardName;
@@ -224,7 +224,7 @@ public class TheLibrarian : EditorWindow {
                 break;
             case 1:
                 Minion min = new Minion();
-                min.id = NSGameplay.Cards.ECardKeys.TestCardTwo;
+                min.id = "Test Card two";
                 min.type = NSGameplay.Cards.ECardType.Minion;
                 min.cost = 2;
                 min.name = cardName;
@@ -244,7 +244,7 @@ public class TheLibrarian : EditorWindow {
                 break;
             case 2:
                 Passive pas = new Passive();
-                pas.id = NSGameplay.Cards.ECardKeys.TestCardThree;
+                pas.id ="Test Card three";
                 break;
         }
 

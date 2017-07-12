@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <CardList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <List>
-    <Card xsi:type="Action">
-      <id>TestCardOne</id>
-      <owningUnit>Debug</owningUnit>
+    <Card xsi:type="Minion">
+      <id>Minion</id>
       <tooltip>
         <image_Path>path of an image</image_Path>
-        <title>Testing</title>
-        <description>This is a test</description>
+        <title>Title of tooltip</title>
+        <description>The description.</description>
       </tooltip>
-      <type>Instant</type>
-      <name>Action</name>
-      <cost>6</cost>
-      <damageOut>8</damageOut>
-      <healOut>0</healOut>
-      <damageIn>6</damageIn>
-      <healIn>0</healIn>
-      <armorUpIn>2</armorUpIn>
-      <armorDownIn>0</armorDownIn>
-      <armorUpOut>0</armorUpOut>
-      <armorDownOut>0</armorDownOut>
+      <type>Minion</type>
+      <name>Minion</name>
+      <cost>2</cost>
+      <health>20</health>
+      <defence>2</defence>
+      <baseDefence>2</baseDefence>
+      <attack>4</attack>
+      <utility>0</utility>
+      <exhausted>false</exhausted>
       <owningPlayer>0</owningPlayer>
     </Card>
   </List>

@@ -27,10 +27,10 @@ public class Libraries : MonoBehaviour {
 
     //Repository of all cards data.
     //Images will be loaded seperatly from path.
-    private Dictionary<ECardKeys, Card> Library_Card = new Dictionary<ECardKeys, Card>();
+    private Dictionary<string, Card> Library_Card = new Dictionary<string, Card>();
 
     //Repo for unit data.
-    private Dictionary<EUnitIDs, UnitInfo> Library_Unit = new Dictionary<EUnitIDs, UnitInfo>();
+    private Dictionary<string, UnitInfo> Library_Unit = new Dictionary<string, UnitInfo>();
     
     //Loads the card library from file.
     public void Load_Card_Library (List<Card> list)
@@ -88,7 +88,7 @@ public class Libraries : MonoBehaviour {
     {
         int count = 0;
         UnitList list = new UnitList("main");
-        foreach (KeyValuePair<EUnitIDs, UnitInfo> u in Library_Unit)
+        foreach (KeyValuePair<string, UnitInfo> u in Library_Unit)
         {
             list.unitList.Add(u.Value);
             ++count;
@@ -99,12 +99,12 @@ public class Libraries : MonoBehaviour {
     }
 
     //Retreive a specific card from the library.
-    public Card GetCard(ECardKeys key)
+    public Card GetCard(string key)
     {
         return Library_Card[key];
     }
     //Retreive a specific Unit from the library.
-    public UnitInfo GetUnit(EUnitIDs key)
+    public UnitInfo GetUnit(string key)
     {
         return Library_Unit[key];
     }

@@ -2,7 +2,7 @@
 <UnitList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <List>
     <Unit>
-      <id>UnitX1</id>
+      <id>Hunter</id>
       <health>100</health>
       <defence>5</defence>
       <baseDefence>5</baseDefence>
