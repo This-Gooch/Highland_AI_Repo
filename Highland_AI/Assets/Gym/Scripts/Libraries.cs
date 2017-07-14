@@ -55,20 +55,29 @@ public class Libraries : MonoBehaviour {
     //Add or update a card entry.
     public bool Save_Card_Local(Card c)
     {
-        bool IsNewEntry = false;
-        if (Library_Card[c.id] == null)
+        bool IsNewEntry = true;
+        if (Library_Card.ContainsKey(c.id))
         {
-            IsNewEntry = true;
-            Debug.Log("Card is a new entry");
+            Library_Card[c.id] = c;
+            IsNewEntry = false;
         }
-        Library_Card[c.id] = c;
+        else { Library_Card.Add(c.id, c); }
         return IsNewEntry;
     }
 
     //Save Card Library to file
-    public bool Save_Cards_To_File()
+    public int Save_Cards_To_File()
     {
-        return true;
+        int count = 0;
+        CardList list = new CardList("main");
+        foreach (KeyValuePair<ECardKeys, Card> c in Library_Card)
+        {
+            list.cardList.Add(c.Value);
+            ++count;
+        }
+        XMLDataSerializer.SaveCards(list, "Assets/Data/Cards.xml");
+        Debug.Log("Saving " + count + " cards to file.");
+        return count;
     }
 
     //Add or update and a Unit entry.

@@ -124,64 +124,6 @@ public class TheLibrarian : EditorWindow {
             armorDownIn = EditorGUILayout.IntField(new GUIContent("Armor Down In: ", "How much armor does this card damage to the user?"), armorDownIn, GUILayout.Width(250));
         }
 
-
-
-        /*
-        hasImmidiate = EditorGUILayout.BeginToggleGroup(new GUIContent("Has Immidiate Effect?", "Does this Action Card have an immidiate effect when played?"), hasImmidiate);
-            isImdDmg = EditorGUILayout.BeginToggleGroup("Does Damage?", isImdDmg);
-                targetIndexDmg = EditorGUILayout.Popup("Target or Self?", targetIndexDmg, targetDmg, GUILayout.Width(250));
-                dmgImdOutput = EditorGUILayout.IntField("Damage Output:", dmgImdOutput, GUILayout.Width(250));
-            EditorGUILayout.EndToggleGroup();
-            isImdHeal = EditorGUILayout.BeginToggleGroup("Does Healing?", isImdHeal);
-                targetIndexHeal = EditorGUILayout.Popup("Target or Self?", targetIndexHeal, targetHeal, GUILayout.Width(250));
-                healImdOutput = EditorGUILayout.IntField("Healing Output", healImdOutput, GUILayout.Width(250));
-            EditorGUILayout.EndToggleGroup();
-        EditorGUILayout.EndToggleGroup();
-        EditorGUILayout.Space();
-        
-        if (GUILayout.Button("Build Action Card", GUILayout.Width(250)))
-        {
-            if (baseCardSource != null)
-            {
-                if (baseCardSource.name != cardName)
-                {
-                    if (cardName != "")
-                    {
-                       // CheckExistance();
-                    }
-                    else { EditorUtility.DisplayDialog("No Name", "Give the Action Card a name", "OK"); }
-                }
-                else { EditorUtility.DisplayDialog("Bad Name", "Name cannot be ActionCardBase. Please Change.", "OK"); }
-            }
-            else
-            {
-                Debug.Log("Need Source Action Card before Action Editor can build.");
-            }
-        }
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        if (GUILayout.Button("Clear Fields", GUILayout.Width(250)))
-        {
-            //ClearAllFields();
-        }
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        if (GUILayout.Button("Load Selected Action", GUILayout.Width(250)))
-        {
-            //LoadExistingAction();
-        }
-
-        GUILayout.Label("Action Action Cards:", EditorStyles.boldLabel);
-
-        allActionCards = Resources.LoadAll("ActionCards");
-        ScriptableObject target = this;
-        SerializedObject so = new SerializedObject(target);
-        SerializedProperty cardsProperty = so.FindProperty("allActionCards");
-
-        EditorGUILayout.PropertyField(cardsProperty, true, GUILayout.Width(500));
-
-        so.ApplyModifiedProperties();
-        */
         if (GUILayout.Button("Create Card", GUILayout.Width(250)))
         {
             CreatCard();
@@ -195,7 +137,8 @@ public class TheLibrarian : EditorWindow {
     void CreatCard()
     {
         XMLDataSerializer.LoadCards("Assets/Data/Cards.xml");
-
+        //CardList cl = new CardList("main");
+        
         switch (cardTypeInt)
         {
             case 0:
@@ -217,9 +160,7 @@ public class TheLibrarian : EditorWindow {
                 act.armorDownIn = armorDownIn;
                 act.armorDownOut = armorDownOut;
 
-                //Saves the card into the library
                 Libraries.instance.Save_Card_Local(act);
-                //Saves the entire library to file
                 Libraries.instance.Save_Cards_To_File();
                 break;
             case 1:
@@ -237,137 +178,18 @@ public class TheLibrarian : EditorWindow {
                 min.defence = minionBaseDefense;
                 min.health = minionHealth;
 
-                //Saves the card into the library
                 Libraries.instance.Save_Card_Local(min);
-                //Saves the entire library to file
                 Libraries.instance.Save_Cards_To_File();
                 break;
             case 2:
                 Passive pas = new Passive();
                 pas.id = NSGameplay.Cards.ECardKeys.TestCardThree;
+
+                Libraries.instance.Save_Card_Local(pas);
+                Libraries.instance.Save_Cards_To_File();
                 break;
         }
 
     }
-    /*
-    bool yesWasClicked = false;
-    Object checkTestObject;
-    void CheckExistance()
-    {
-        checkTestObject = null;
-        checkTestObject = AssetDatabase.LoadAssetAtPath("Assets/Resources/ActionCards/" + cardName + ".prefab", typeof(Object));
-        if (checkTestObject == null)
-        {
-            CreateActionCard();
-        }
-        else
-        {
-            yesWasClicked = EditorUtility.DisplayDialog("That Action Card already exists!", "Do you want to replace the existing action with a new one?", "Yes", "No");
-            if(yesWasClicked)
-            {
-                CreateActionCard();
-                yesWasClicked = false;
-            }
-        }
-    }
-
-    void CreateActionCard()
-    { 
-
-        GameObject cloneBaseCard = PrefabUtility.CreatePrefab("Assets/Resources/ActionCards/" + actionName + ".prefab", baseCardSource as GameObject) as GameObject;
-        cloneBaseCard.transform.GetChild(1).GetComponent<Text>().text = actionName;
-        cloneBaseCard.transform.GetChild(4).GetComponent<Text>().text = actionDescription;
-        cloneBaseCard.transform.GetChild(0).GetComponent<Image>().sprite = actionImage;
-        cloneBaseCard.tag = "ParentAction";
-
-            if (hasImmidiate)
-            {
-                Action_Immediate actImd = cloneBaseCard.AddComponent(typeof(Action_Immediate)) as Action_Immediate;
-
-            actImd.utilityCost = utilityCost;
-            actImd.utilityGain = utilityGain;
-                if (isImdDmg)
-                {
-                    actImd.isDamage = true;
-                    if (targetIndexDmg == 1)
-                    {
-                        actImd.needsTarget = true;
-                    }
-                    actImd.damageOutput = dmgImdOutput;
-                }
-
-                if (isImdHeal)
-                {
-                    actImd.isHeal = true;
-                    if (targetIndexHeal == 1)
-                    {
-                        actImd.needsTarget = true;
-                    }
-                    actImd.healingOutput = healImdOutput;
-                }
-            }
-    }
-
-    void LoadExistingAction()
-    {
-        editActionCard = Selection.activeObject as GameObject;
-        if (editActionCard != null)
-        {
-            if (editActionCard.CompareTag("ParentAction"))
-            {
-                ClearAllFields();
-                actionName = editActionCard.transform.GetChild(1).GetComponent<Text>().text;
-                actionDescription = editActionCard.transform.GetChild(4).GetComponent<Text>().text;
-                actionImage = editActionCard.transform.GetChild(0).GetComponent<Image>().sprite;
-                if (editActionCard.GetComponent<Action_Immediate>() != null)
-                {
-                    hasImmidiate = true;
-                    utilityCost = editActionCard.GetComponent<Action_Immediate>().utilityCost;
-                    utilityGain = editActionCard.GetComponent<Action_Immediate>().utilityGain;
-                    if (editActionCard.GetComponent<Action_Immediate>().needsTarget == true)
-                    {
-                        targetIndexDmg = 1;
-                        targetIndexHeal = 1;
-                    }
-                    if (editActionCard.GetComponent<Action_Immediate>().isDamage == true)
-                    {
-                        isImdDmg = true;
-                        dmgImdOutput = editActionCard.GetComponent<Action_Immediate>().damageOutput;
-                    }
-                    if (editActionCard.GetComponent<Action_Immediate>().isHeal == true)
-                    {
-                        isImdHeal = true;
-                        healImdOutput = editActionCard.GetComponent<Action_Immediate>().healingOutput;
-                    }
-                    editActionCard = null;
-                }
-            }
-            else { EditorUtility.DisplayDialog("Not a Parent", "Please select a Parent to an Action Card", "OK"); }
-            editActionCard = null;
-        }
-        else { EditorUtility.DisplayDialog("Nothing Selected", "Please select a Parent to an Action Card", "OK"); }
-    }
-
-    void ClearAllFields()
-    {
-        actionName = "";
-        actionDescription = "";
-
-        actionImage = null;
-
-        utilityCost = 0;
-        utilityGain = 0;
-        dmgImdOutput = 0;
-        healImdOutput = 0;
-
-        targetIndexDmg = 0;
-        targetIndexHeal = 0;
-
-        hasImmidiate = false;
-        isImdDmg = false;
-        isImdHeal = false;
-        hasTurnStart = false;
-        hasTurnEnd = false;
-    }
-    */
+   
 }
