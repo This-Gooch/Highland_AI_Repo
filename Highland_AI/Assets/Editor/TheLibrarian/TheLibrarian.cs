@@ -143,7 +143,7 @@ public class TheLibrarian : EditorWindow {
         {
             case 0:
                 Action act = new Action();
-                act.id = NSGameplay.Cards.ECardKeys.TestCardOne;
+                act.id = "Test card One";
                 act.type = NSGameplay.Cards.ECardType.Instant;
                 act.cost = utilityCost;
                 act.name = cardName;
@@ -165,7 +165,7 @@ public class TheLibrarian : EditorWindow {
                 break;
             case 1:
                 Minion min = new Minion();
-                min.id = NSGameplay.Cards.ECardKeys.TestCardTwo;
+                min.id = "Test Card two";
                 min.type = NSGameplay.Cards.ECardType.Minion;
                 min.cost = 2;
                 min.name = cardName;
@@ -183,7 +183,73 @@ public class TheLibrarian : EditorWindow {
                 break;
             case 2:
                 Passive pas = new Passive();
+<<<<<<< HEAD
                 pas.id = NSGameplay.Cards.ECardKeys.TestCardThree;
+=======
+                pas.id ="Test Card three";
+                break;
+        }
+
+    }
+    /*
+    bool yesWasClicked = false;
+    Object checkTestObject;
+    void CheckExistance()
+    {
+        checkTestObject = null;
+        checkTestObject = AssetDatabase.LoadAssetAtPath("Assets/Resources/ActionCards/" + cardName + ".prefab", typeof(Object));
+        if (checkTestObject == null)
+        {
+            CreateActionCard();
+        }
+        else
+        {
+            yesWasClicked = EditorUtility.DisplayDialog("That Action Card already exists!", "Do you want to replace the existing action with a new one?", "Yes", "No");
+            if(yesWasClicked)
+            {
+                CreateActionCard();
+                yesWasClicked = false;
+            }
+        }
+    }
+
+    void CreateActionCard()
+    { 
+
+        GameObject cloneBaseCard = PrefabUtility.CreatePrefab("Assets/Resources/ActionCards/" + actionName + ".prefab", baseCardSource as GameObject) as GameObject;
+        cloneBaseCard.transform.GetChild(1).GetComponent<Text>().text = actionName;
+        cloneBaseCard.transform.GetChild(4).GetComponent<Text>().text = actionDescription;
+        cloneBaseCard.transform.GetChild(0).GetComponent<Image>().sprite = actionImage;
+        cloneBaseCard.tag = "ParentAction";
+
+            if (hasImmidiate)
+            {
+                Action_Immediate actImd = cloneBaseCard.AddComponent(typeof(Action_Immediate)) as Action_Immediate;
+
+            actImd.utilityCost = utilityCost;
+            actImd.utilityGain = utilityGain;
+                if (isImdDmg)
+                {
+                    actImd.isDamage = true;
+                    if (targetIndexDmg == 1)
+                    {
+                        actImd.needsTarget = true;
+                    }
+                    actImd.damageOutput = dmgImdOutput;
+                }
+
+                if (isImdHeal)
+                {
+                    actImd.isHeal = true;
+                    if (targetIndexHeal == 1)
+                    {
+                        actImd.needsTarget = true;
+                    }
+                    actImd.healingOutput = healImdOutput;
+                }
+            }
+    }
+>>>>>>> 167b132f4f237d1bb4a8320eda5799aa2f99b0ab
 
                 Libraries.instance.Save_Card_Local(pas);
                 Libraries.instance.Save_Cards_To_File();

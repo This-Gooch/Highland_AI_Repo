@@ -44,10 +44,11 @@ public class CardList
 public abstract class Card {
 
     //Te unique ID for the card.
-    public ECardKeys id { get; set; }
+    public string id { get; set; }
 
     //owning unit might be useless
-    public EUnitIDs owningUnit { get; set; }
+    //public string owningUnit { get; set; }
+    //probably going to replace with event
 
     //Tooltip information (May move this outside of the class).
     public Tooltip tooltip { get; set; }

@@ -51,7 +51,7 @@ public class UnitInfo
         exhausted = false;
     }
 
-    public EUnitIDs id { get; set; }
+    public string id { get; set; }
     public int health { get; set; }
     public int defence { get; set; }
     public int baseDefence { get; set; }

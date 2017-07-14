@@ -1,17 +1,6 @@
 ﻿namespace NSGameplay {
 
-    //Enum of units
-    public enum EUnitIDs
-    {
-        Debug = 0,
-        //Units from 1-99 are from class X
-        UnitX1 = 1,
-        UnitX2 = 2,
-        //Units from 100-199 are from class Y
-        UnitY1 = 100,
-        UnityY2 = 101
-        //Etc...
-    }
+    
 
     //Card/Action related namespace.
     namespace Cards
@@ -86,112 +75,7 @@
             public string description { get; set; }
         }
 
-        public enum ECardKeys
-        {
-            //////////////////////////////////////////////////////////////
-            ///Every cards will be listed here with a unique key.       //
-            ///Use card name as a naming convention (in Pascal Case).   //
-            ///Max value (int32) = 2147483647.                          //
-            ///Standard set (Cards available to all classes):           //
-            ///     reserved values:                                    //
-            ///         0 - 1000                                        //
-            /// Class 1:                                                //
-            ///     reserved values:                                    //
-            ///         2000 - 3000                                     //
-            /// Class 2:                                                //
-            ///     reserved values:                                    //
-            ///         4000 - 5000                                     //
-            /// Class 3:                                                //
-            ///     reserved values:                                    //
-            ///         6000 - 7000                                     //
-            /// Class 4:                                                //
-            ///     reserved values:                                    //
-            ///         8000 - 9000                                     //
-            /// Class 5:                                                //
-            ///     reserved values:                                    //
-            ///         10,000 - 11,000                                 //
-            /// Class 6:                                                //
-            ///     reserved values:                                    //
-            ///         12,000 - 13,000                                 //
-            /// Class 7:                                                //
-            ///     reserved values:                                    //
-            ///         14,000 - 15,000                                 //
-            /// Class 8:                                                //
-            ///     reserved values:                                    //
-            ///         16,000 - 17,000                                 //
-            ///                                                         //
-            //////////////////////////////////////////////////////////////
-
-
-
-            ///********************************************************///
-            /// Standard Set                                           ///
-            ///Card all units/classes can use in their decks.          ///
-            ///Reversed from 0 - 1000                                  ///
-            ///********************************************************///
-
-            DirectAttack = 0,
-
-            TestCardOne = 1,
-            TestCardTwo = 2,
-            TestCardThree = 3,
-
-            
-            Guard = 100,
-
-            ShuffleDeck = 200,
-            BasicMinion = 300
-
-            ///********************************************************///
-            /// Class 1 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 2000 - 3000                               ///
-            ///********************************************************///
-
-            ///********************************************************///
-            /// Class 2 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 4000 - 5000                               ///
-            ///********************************************************///        
-
-            ///********************************************************///
-            /// Class 3 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 6000 - 7000                               ///
-            ///********************************************************///
-
-
-            ///********************************************************///
-            /// Class 4 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 8000 - 9000                               ///
-            ///********************************************************///
-
-            ///********************************************************///
-            /// Class 5 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 10000 - 11000                             ///
-            ///********************************************************///
-
-
-            ///********************************************************///
-            /// Class 6 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 12000 - 13000                             ///
-            ///********************************************************///
-
-            ///********************************************************///
-            /// Class 7 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 14000 - 15000                             ///
-            ///********************************************************///
-
-            ///********************************************************///
-            /// Class 8 Set                                            ///
-            ///xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          ///
-            ///Reversed from 16000 - 17000                             ///
-            ///********************************************************///
-        }
+        
 
 
     }
