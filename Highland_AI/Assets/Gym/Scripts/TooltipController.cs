@@ -28,12 +28,7 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField]
     [Tooltip("The time delay from the pointer entering this object's box and the tooltips apearing. If set to 0, the tooltips will appear instantly on hover.")]
     public float _delay = 0.75f;
-    [SerializeField]
-    [Tooltip("What should the width of the tooltip panel be in relation to the width of the screen. I.E. 400 pixels/1920 = 4.8.")]
-    public float _SizeRationToWidth = 4.8f;
-    [SerializeField]
-    [Tooltip("The width to height ratio. I.E. 0.5 means the height is half the width.")]
-    public float _HeightToWidthRatio = 0.5f;
+    
 
     //Member variable
     private IEnumerator m_Coroutine;
@@ -49,8 +44,6 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Awake()
     {
-        m_PanelWidth = Screen.width / _SizeRationToWidth;
-        m_PanelHeight = m_PanelWidth * _HeightToWidthRatio;
         //Getting references of UI tooltip object.
         tooltip = GameObject.FindWithTag("UI").transform.FindChild("Popups").transform.FindChild("Tooltip").gameObject;
         tooltipImage = tooltip.transform.FindChild("image").gameObject.GetComponent<Image>();

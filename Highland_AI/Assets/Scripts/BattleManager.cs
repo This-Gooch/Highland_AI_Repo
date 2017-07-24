@@ -8,6 +8,10 @@ public class BattleManager : MonoBehaviour {
 
     public static BattleManager instance;
 
+    #region Editor References    
+    public Transform _World;
+    #endregion
+
     #region Public Member
     //Lists of player's units
     public List<Unit> P1_Units = new List<Unit>();
@@ -141,6 +145,53 @@ public class BattleManager : MonoBehaviour {
         Debug.LogError("Error registering unit to BattleManager. Null Reference.");
         return false;
     }
+    //Get the unit's desired position
+    public Transform GetFieldPosition(Unit u)
+    {
+        if (u.info.owningPlayer == 1)
+        {
+            int unitIndex = P1_Units.IndexOf(u);
+            if (unitIndex == -1)
+            {
+                Debug.LogError("Error: Unit no registered in battle manager.");
+                return transform;
+            }
+
+            Transform root = _World.FindChild("UnitsSlots").FindChild("Player1");
+
+            if (P1_Units.Count > 4 || P1_Units.Count < 1)
+            {
+                Debug.LogError("Error: Unit Count invalid -> " + P1_Units.Count);
+                return transform;
+            }
+            return root.FindChild(P1_Units.Count.ToString() + "units").FindChild((unitIndex+1).ToString());
+        }
+        else if (u.info.owningPlayer == 2)
+        {
+            int unitIndex = P2_Units.IndexOf(u);
+            if (unitIndex == -1)
+            {
+                Debug.LogError("Error: Unit no registered in battle manager.");
+                return transform;
+            }
+
+            Transform root = _World.FindChild("UnitsSlots").FindChild("Player2");
+
+            if (P2_Units.Count > 4 || P2_Units.Count < 1)
+            {
+                Debug.LogError("Error: Unit Count invalid -> " + P2_Units.Count);
+                return transform;
+            }
+
+            return root.FindChild(P2_Units.Count.ToString() + "units").FindChild((unitIndex + 1).ToString());
+        }
+
+
+
+        Debug.LogError("Error: No valid owner for unit -> " + u.info.owningPlayer);
+        return transform;
+    }
+
     #endregion
 
     #region States

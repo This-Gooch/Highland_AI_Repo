@@ -1,8 +1,9 @@
-﻿/// <summary>
+﻿using UnityEngine.EventSystems;
+/// <summary>
 /// Interface that lets you increment decrement
 /// a duration value.
 /// </summary>
-internal interface IDuration
+public interface IDuration
 {
     void Increment(int modifier);
 
@@ -11,4 +12,10 @@ internal interface IDuration
     void Decrement(int modifier);
 
     void Reset();
+}
+
+public interface ISelectable : IEventSystemHandler
+{
+    void OnMouseOver(PointerEventData eventData);
+    void OnMouseClick(PointerEventData eventData);
 }

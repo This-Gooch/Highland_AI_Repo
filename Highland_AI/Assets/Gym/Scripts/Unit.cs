@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using System.Xml;
 using System.Xml.Serialization;
 using NSGameplay;
+using System;
+using UnityEngine.EventSystems;
 //XML root name in the file.
 [XmlRoot("UnitList")]
 // include type class Unit
@@ -80,29 +82,13 @@ public class UnitInfo
     
     public string portraitPath { get; set; }
 }
-public class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour, ISelectable {
 
     #region Editor references
-    [SerializeField]
-    Image _Portrait;
-    [SerializeField]
-    Text _Name;
-    [SerializeField]
-    Text _Health;
-    [SerializeField]
-    Text _Defence;
-    [SerializeField]
-    Text _Attack;
-    [SerializeField]
-    Text _Utility;
+    
     [SerializeField]
     int _Player;
-    [SerializeField]
-    GameObject _CardSlot1;
-    [SerializeField]
-    GameObject _CardSlot2;
-    [SerializeField]
-    GameObject _CardSlot3;
+    
     #endregion
 
     #region Public members
@@ -114,6 +100,8 @@ public class Unit : MonoBehaviour {
     #endregion
 
     #region Private members
+    private float m_UnitHeight;
+
     private string m_PortraitImagePath = "Units/Portraits/";
 
     #endregion
@@ -121,27 +109,13 @@ public class Unit : MonoBehaviour {
 
     private void Awake()
     {
-        Initialize();              
+        Initialize();
+        Register();
     }
 
     private void Start()
     {
-        //Register all eventhandlers on start.
-        //This is mostly an example of usage at the momment.
-        EventHandler_Gameplay.OnUnitSpawn += this.NewUnitCreated;
-        EventHandler_Gameplay.OnUnitDestroyed += this.OnUnitDestroy;
-        if (info.owningPlayer == 1)
-        {
-            EventHandler_Gameplay.OnPlayer1TurnBegin += this.OnTurnBegin;
-        }
-        else if (info.owningPlayer == 2)
-        {
-            EventHandler_Gameplay.OnPlayer2TurnBegin += this.OnTurnBegin;
-        }
-        //Trigger new unit created.
-        EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.info.owningPlayer);
-
-        Register();
+        InitializeTransform();
     }
 
     #region public Methods
@@ -193,26 +167,51 @@ public class Unit : MonoBehaviour {
         info.name = "the_name_of_the_hero";
         ////////////////////
 
-        _Portrait.sprite = Resources.Load<Sprite>(m_PortraitImagePath + name) as Sprite;
-        _Name.text = info.name.ParseName();
+        //Set the height at which to display UI elements.
+        //m_UnitHeight = 
+
+
         info.exhausted = false;
         info.owningPlayer = _Player;
         info.defence = info.baseDefence;
+
+        
+        
+
         UpdateUI();
+    }
+    //Set the unit's starting position on the battlefield.
+    private void InitializeTransform()
+    {        
+        Transform t = BattleManager.instance.GetFieldPosition(this);
+        transform.position = t.position;
+        transform.rotation = t.rotation;
     }
 
     private void Register()
     {
         //TODO: register to networked battle manager instead.
         BattleManager.instance.RegisterUnit(this);
+
+        //Register all eventhandlers on start.
+        //This is mostly an example of usage at the momment.
+        EventHandler_Gameplay.OnUnitSpawn += this.NewUnitCreated;
+        EventHandler_Gameplay.OnUnitDestroyed += this.OnUnitDestroy;
+        if (info.owningPlayer == 1)
+        {
+            EventHandler_Gameplay.OnPlayer1TurnBegin += this.OnTurnBegin;
+        }
+        else if (info.owningPlayer == 2)
+        {
+            EventHandler_Gameplay.OnPlayer2TurnBegin += this.OnTurnBegin;
+        }
+        //Trigger new unit created.
+        EventHandler_Gameplay.NewUnitCreated(this.gameObject, this.info.owningPlayer);
     }
 
     private void UpdateUI()
     {
-        _Health.text = info.health.ToString();
-        _Defence.text = info.defence.ToString();
-        _Attack.text = info.attack.ToString();
-        _Utility.text = info.utility.ToString();        
+            
     }
 
     #endregion
@@ -240,6 +239,16 @@ public class Unit : MonoBehaviour {
     {
         Debug.Log("OnTurnBegin:" + gameObject.name + ". From player " + info.owningPlayer);
         info.defence = info.baseDefence;
+    }
+
+    public void OnMouseOver(PointerEventData eventData)
+    {
+        Debug.Log("OnMouseOver");
+    }
+
+    public void OnMouseClick(PointerEventData eventData)
+    {
+        Debug.Log("OnMouseClick");
     }
 
     #endregion

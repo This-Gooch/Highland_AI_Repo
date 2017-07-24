@@ -2,12 +2,49 @@
 <CardList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <List>
     <Card xsi:type="Minion">
+<<<<<<< HEAD
+      <id>TestCardTwo</id>
+      <owningUnit>Debug</owningUnit>
+      <tooltip>
+        <image_Path>path of an image</image_Path>
+        <title>Testing</title>
+        <description>This is a test</description>
+      </tooltip>
+      <type>Minion</type>
+      <name>Action Test</name>
+      <cost>2</cost>
+      <health>20</health>
+      <defence>4</defence>
+      <baseDefence>4</baseDefence>
+      <attack>8</attack>
+      <utility>0</utility>
+      <exhausted>false</exhausted>
+      <owningPlayer>0</owningPlayer>
+    </Card>
+    <Card xsi:type="Action">
+      <id>TestCardOne</id>
+      <owningUnit>Debug</owningUnit>
+=======
       <id>Minion</id>
+>>>>>>> 167b132f4f237d1bb4a8320eda5799aa2f99b0ab
       <tooltip>
         <image_Path>path of an image</image_Path>
         <title>Title of tooltip</title>
         <description>The description.</description>
       </tooltip>
+<<<<<<< HEAD
+      <type>Instant</type>
+      <name>Action Test</name>
+      <cost>6</cost>
+      <damageOut>8</damageOut>
+      <healOut>0</healOut>
+      <damageIn>6</damageIn>
+      <healIn>0</healIn>
+      <armorUpIn>2</armorUpIn>
+      <armorDownIn>0</armorDownIn>
+      <armorUpOut>0</armorUpOut>
+      <armorDownOut>0</armorDownOut>
+=======
       <type>Minion</type>
       <name>Minion</name>
       <cost>2</cost>
@@ -17,7 +54,18 @@
       <attack>4</attack>
       <utility>0</utility>
       <exhausted>false</exhausted>
+>>>>>>> 167b132f4f237d1bb4a8320eda5799aa2f99b0ab
       <owningPlayer>0</owningPlayer>
+    </Card>
+    <Card xsi:type="Passive">
+      <id>TestCardThree</id>
+      <owningUnit>Debug</owningUnit>
+      <type>PassiveEffect</type>
+      <cost>0</cost>
+      <m_CallPhase>NONE</m_CallPhase>
+      <m_Priority>NONE</m_Priority>
+      <m_Duration xsi:nil="true" />
+      <m_StartingBaseDuration xsi:nil="true" />
     </Card>
   </List>
   <Listname>main</Listname>
