@@ -82,7 +82,7 @@ public class UnitInfo
     
     public string portraitPath { get; set; }
 }
-public class Unit : MonoBehaviour, ISelectable {
+public class Unit : MonoBehaviour{
 
     #region Editor references
     
@@ -95,8 +95,11 @@ public class Unit : MonoBehaviour, ISelectable {
     public UnitInfo info;
     //Card in hand for the unit.
     public List<Card> m_Hand = new List<Card>();
-
     public Deck m_Deck;
+
+    public bool m_IsMouseOver = false;
+    public bool m_IsSelected = false;
+
     #endregion
 
     #region Private members
@@ -106,7 +109,7 @@ public class Unit : MonoBehaviour, ISelectable {
 
     #endregion
 
-
+    #region Monobehaviour Functions
     private void Awake()
     {
         Initialize();
@@ -117,6 +120,35 @@ public class Unit : MonoBehaviour, ISelectable {
     {
         InitializeTransform();
     }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Select"))
+        {
+            //Clicking on a unit not selected.
+            if (m_IsMouseOver && !m_IsSelected)
+            {
+                Select();
+            }
+            //Clicking anywhere else deselects.
+            else if (!m_IsMouseOver && m_IsSelected)
+            {
+                Deselect();
+            }
+        }
+
+        if (Input.GetButtonDown("Deselect") && m_IsSelected)
+        {
+            Deselect();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+
+    }
+
+    #endregion
 
     #region public Methods
     /// <summary>
@@ -213,6 +245,18 @@ public class Unit : MonoBehaviour, ISelectable {
     {
             
     }
+    //This unit is selected
+    void Select()
+    {
+        m_IsSelected = true;
+        ReferenceHolder.instance.UnitUI.SetActive(true);
+    }
+    //This unit is getting deselected
+    void Deselect()
+    {
+        m_IsSelected = false;
+        ReferenceHolder.instance.UnitUI.SetActive(false);
+    }
 
     #endregion
 
@@ -241,14 +285,14 @@ public class Unit : MonoBehaviour, ISelectable {
         info.defence = info.baseDefence;
     }
 
-    public void OnMouseOver(PointerEventData eventData)
+    public void OnMouseEnter()
     {
-        Debug.Log("OnMouseOver");
+        m_IsMouseOver = true;
     }
 
-    public void OnMouseClick(PointerEventData eventData)
+    public void OnMouseExit()
     {
-        Debug.Log("OnMouseClick");
+        m_IsMouseOver = false;
     }
 
     #endregion

@@ -13,9 +13,3 @@ public interface IDuration
 
     void Reset();
 }
-
-public interface ISelectable : IEventSystemHandler
-{
-    void OnMouseOver(PointerEventData eventData);
-    void OnMouseClick(PointerEventData eventData);
-}

@@ -15,28 +15,16 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [SerializeField][Tooltip("The title displayed on the Tooltip.")]
     string _title;
     [SerializeField][Tooltip("The main text displayed inside the popup.")]
-    public string _info;
-    [SerializeField]
-    [Tooltip("The background main color. Leave white for none.")]
-    public Color _backgroundColor = new Color(1f, 1f, 1f, 1f);
-    [SerializeField]
-    [Tooltip("The title font color.")]
-    public Color _titleFontColor = new Color(0f, 0f, 0f, 1f);
-    [SerializeField]
-    [Tooltip("The info font color.")]
-    public Color _infoFontColor = new Color(0f, 0f, 0f, 1f);
+    public string _info;   
     [SerializeField]
     [Tooltip("The time delay from the pointer entering this object's box and the tooltips apearing. If set to 0, the tooltips will appear instantly on hover.")]
     public float _delay = 0.75f;
     
 
     //Member variable
-    private IEnumerator m_Coroutine;
-    private float m_PanelWidth;
-    private float m_PanelHeight;
+    private IEnumerator m_Coroutine;    
     //Object references
     private GameObject tooltip;
-    private Image tooltipImage;
     private Text tooltipTitle;
     private Text tooltipInfo;
     
@@ -46,9 +34,8 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         //Getting references of UI tooltip object.
         tooltip = GameObject.FindWithTag("UI").transform.FindChild("Popups").transform.FindChild("Tooltip").gameObject;
-        tooltipImage = tooltip.transform.FindChild("image").gameObject.GetComponent<Image>();
         tooltipTitle = tooltip.transform.FindChild("name").gameObject.GetComponent<Text>();
-        tooltipInfo = tooltip.transform.FindChild("info").gameObject.GetComponent<Text>();
+        tooltipInfo = tooltip.transform.FindChild("mask").FindChild("Holder").FindChild("info").gameObject.GetComponent<Text>();
     }
 
    
@@ -61,21 +48,15 @@ public class TooltipController : MonoBehaviour, IPointerEnterHandler, IPointerEx
         m_Coroutine = Activate(tooltip);
         StartCoroutine(m_Coroutine);
 
-        //float sizingFactor = Screen.width / 1920f;
-        tooltip.GetComponent<Image>().color = _backgroundColor;
 
         tooltipTitle.text = _title;
-        tooltipTitle.color = _titleFontColor;
         tooltipInfo.text = _info;
-        tooltipInfo.color = _infoFontColor;
 
-        //Size the tooltip based on screen size.
-        tooltip.GetComponent<RectTransform>().sizeDelta = new Vector2(m_PanelWidth, m_PanelHeight);
-        
-
-        tooltip.transform.position = new Vector3(Mathf.Clamp(eventData.position.x, 0f, Screen.width - tooltip.GetComponent<RectTransform>().sizeDelta.x), eventData.position.y);
-
-
+        RectTransform rect = tooltip.GetComponent<RectTransform>();
+        tooltip.transform.position = 
+            new Vector3( Mathf.Clamp( (eventData.position.x + rect.sizeDelta.x/2f),
+                                        0f, Screen.width - rect.sizeDelta.x), 
+                                        Mathf.Clamp(eventData.position.y + rect.sizeDelta.y/2f, rect.sizeDelta.y/2f, Screen.height - rect.sizeDelta.y/2f));
 
     }
     public void OnPointerExit(PointerEventData eventData)
