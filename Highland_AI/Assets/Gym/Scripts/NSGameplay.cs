@@ -1,6 +1,5 @@
 ﻿namespace NSGameplay {
 
-    
 
     //Card/Action related namespace.
     namespace Cards

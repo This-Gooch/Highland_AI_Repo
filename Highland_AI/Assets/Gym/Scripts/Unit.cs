@@ -39,7 +39,7 @@ public class UnitInfo
     //Default constructor
     public UnitInfo() { }
     //Main constructor
-    public UnitInfo(int health, int defence, int attack, int utility, string name, string portraitPath)
+    public UnitInfo(int health, int defence, int attack, int utility, string name)
     {
         this.health = health;
         this.attack = attack;
@@ -47,19 +47,37 @@ public class UnitInfo
         this.defence = defence;
         this.utility = utility;
         this.name = name;
-        this.portraitPath = portraitPath;
-        exhausted = false;
+        this.exhausted = false;
     }
-
-    public string id { get; set; }
+    /// <summary>
+    /// Name is both the card's displayed Name AND id.
+    /// </summary>
+    public string name { get; set; }
     public int health { get; set; }
+    /// <summary>
+    /// Current armor
+    /// </summary>
     public int defence { get; set; }
+    /// <summary>
+    /// Level of armor to reset the unit to at then start of his turn.
+    /// </summary>
     public int baseDefence { get; set; }
     public int attack { get; set; }
+    /// <summary>
+    /// Utility is gained by discarding cards and servers has mana.
+    /// </summary>
     public int utility { get; set; }
+    /// <summary>
+    /// Level is used to determine what skills a unit can use.
+    /// This is gained everytime a unit goes through exhaust. (Card could also maybe used.)
+    /// </summary>
+    public int level { get; set; }
+    /// <summary>
+    /// The unit Is unable to draw or play any skills/cards this turn.
+    /// </summary>
     public bool exhausted { get; set; }
     public int owningPlayer { get; set; }
-    public string name { get; set; }
+    
     public string portraitPath { get; set; }
 }
 public class Unit : MonoBehaviour {
@@ -96,7 +114,7 @@ public class Unit : MonoBehaviour {
     #endregion
 
     #region Private members
-    private string m_PortraitImagePath = "Units/Portraits/main";
+    private string m_PortraitImagePath = "Units/Portraits/";
 
     #endregion
 
@@ -127,24 +145,37 @@ public class Unit : MonoBehaviour {
     }
 
     #region public Methods
-    //When attacking an other unit must defend.
-    public void Attack()
+    /// <summary>
+    /// At lvl 1
+    /// </summary>
+    public void UseAbilityOne()
     {
-        //TODO: implement attack for units.
-
         UpdateUI();
     }
-    //The flip side of an attack
-    public void Defend()
+    /// <summary>
+    /// At lvl 2
+    /// </summary>
+    public void UseAbilityTwo()
     {
-        //TODO: implement defend for units.
-
+        UpdateUI();
+    }
+    /// <summary>
+    /// At lvl 3
+    /// </summary>
+    public void UseSpecial()
+    {
+        UpdateUI();
+    }
+    /// <summary>
+    /// At lvl 4
+    /// </summary>
+    public void UseUltimate()
+    {
         UpdateUI();
     }
     //Draw a card.
     public void Draw()
     {
-
         m_Deck.Draw_From_Deck();
     }
     #endregion
@@ -159,11 +190,11 @@ public class Unit : MonoBehaviour {
         info.attack = 10;
         info.baseDefence = 5;
         info.utility = 2;
-        info.name = "The Name";
+        info.name = "the_name_of_the_hero";
         ////////////////////
 
-        _Portrait.sprite = Resources.Load<Sprite>(m_PortraitImagePath) as Sprite;
-        _Name.text = info.name;
+        _Portrait.sprite = Resources.Load<Sprite>(m_PortraitImagePath + name) as Sprite;
+        _Name.text = info.name.ParseName();
         info.exhausted = false;
         info.owningPlayer = _Player;
         info.defence = info.baseDefence;
@@ -181,8 +212,7 @@ public class Unit : MonoBehaviour {
         _Health.text = info.health.ToString();
         _Defence.text = info.defence.ToString();
         _Attack.text = info.attack.ToString();
-        _Utility.text = info.utility.ToString();
-        
+        _Utility.text = info.utility.ToString();        
     }
 
     #endregion

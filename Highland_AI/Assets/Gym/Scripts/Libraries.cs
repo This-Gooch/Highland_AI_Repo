@@ -47,7 +47,7 @@ public class Libraries : MonoBehaviour {
     {
         foreach (UnitInfo c in list)
         {
-            Library_Unit[c.id] = c;
+            Library_Unit[c.name] = c;
             Debug.Log("Loading : " + c.name);
         }
     }
@@ -75,11 +75,11 @@ public class Libraries : MonoBehaviour {
     public bool Save_Unit_Local(UnitInfo u)
     {
         bool IsNewEntry = false;
-        if (Library_Unit[u.id] == null)
+        if (Library_Unit[u.name] == null)
         {
             IsNewEntry = true;
         }
-        Library_Unit[u.id] = u;
+        Library_Unit[u.name] = u;
         return IsNewEntry;
     }
 

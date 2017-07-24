@@ -77,8 +77,8 @@ public class testCards : MonoBehaviour {
 
     private void CreateNewUnitToLibrary()
     {
-        UnitInfo u = new UnitInfo(100, 5, 10, 1, "The first unit's name", "Units/Portraits/main");
-        u.id = "Hunter";
+        UnitInfo u = new UnitInfo(100, 5, 10, 1, "The first unit's name");
+        u.name = "Hunter";
 
         //Saves the Unit into the library
         Libraries.instance.Save_Unit_Local(u);
@@ -109,8 +109,8 @@ public class testCards : MonoBehaviour {
 
     private void CreateNewUnit()
     {
-        UnitInfo u = new UnitInfo( 100, 5,10,1,"The first unit's name", "Units/Portraits/main");
-        u.id = "Hunter";
+        UnitInfo u = new UnitInfo( 100, 5,10,1,"The first unit's name");
+        u.name = "Hunter";
         UnitList ul = new UnitList("main");
         ul.Add(u);
         XMLDataSerializer.SaveUnits(ul, "Assets/Data/Units.xml");
