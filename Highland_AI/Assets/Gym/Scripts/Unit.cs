@@ -100,6 +100,12 @@ public class Unit : MonoBehaviour{
     public bool m_IsMouseOver = false;
     public bool m_IsSelected = false;
 
+    public Ability m_AbilityOne;
+    public Ability m_AbilityTwo;
+    public Ability m_AbilitySpecial;
+    public Ability m_AbilityUltimate;
+
+
     #endregion
 
     #region Private members
@@ -283,6 +289,11 @@ public class Unit : MonoBehaviour{
     {
         Debug.Log("OnTurnBegin:" + gameObject.name + ". From player " + info.owningPlayer);
         info.defence = info.baseDefence;
+        m_AbilityOne.OnTurnBegin();
+        m_AbilityTwo.OnTurnBegin();
+        m_AbilitySpecial.OnTurnBegin();
+        m_AbilityUltimate.OnTurnBegin();
+
     }
 
     public void OnMouseEnter()

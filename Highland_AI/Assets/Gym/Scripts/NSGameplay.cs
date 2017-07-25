@@ -1,5 +1,42 @@
 ﻿namespace NSGameplay {
 
+    /// <summary>
+    /// For targets not choosen by the player the game will select
+    /// them based on the entity's position in relation to other target's
+    /// and the TargetLayer selected.
+    /// </summary>
+    public enum TargetLayer
+    {
+        none,               //No targets.
+        player_selected,    //The player selects. This value is assigned if the ability/card can select a target.
+        self,               //The targeting entity.
+        all,                //All valid targets.
+        all_ennemies,       //All ennemy targets.
+        all_allies,         //All ally targets.
+        adjacent,           //Targets adjacent to the targeting entity.
+        first_left,         //Target immediatly to the left.
+        first_right,        //Target immediatly to the right.
+        all_left,           //All targets to the left.
+        all_right,          //All targets to the right
+        front               //Target consider "In front" of the targeting entity. May not be used.
+    }
+    /// <summary>
+    /// Effects represents any and all cards/ability's effects. For instance if an ability reads:
+    /// "reduce a target's armor by 5 and attack it", the ability will have a Effect.attack and Effect.modify_armor
+    /// attached with a value of -5 for modify_armor held in a parallel array.
+    /// </summary>
+    public enum Effect
+    {
+        none,
+        attack,
+        modify_health,
+        modify_armor,
+        modify_utility,
+        modify_card_drawned,
+        permanent_modify_armor,
+        permanent_modify_health,
+        permanent_modify_card_drawned
+    }
 
     //Card/Action related namespace.
     namespace Cards
