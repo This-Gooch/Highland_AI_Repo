@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 using NSGameplay;
 using System;
 using UnityEngine.EventSystems;
+
+
+
 //XML root name in the file.
 [XmlRoot("UnitList")]
 // include type class Unit
@@ -88,7 +91,13 @@ public class Unit : MonoBehaviour, ITargetable{
     
     [SerializeField]
     int _Player;
-    
+
+    /// <summary>
+    /// The targeting start/end location for this unit.
+    /// </summary>
+    [SerializeField]
+    private Transform m_TargetingLocation;
+
     #endregion
 
     #region Public members
@@ -100,18 +109,23 @@ public class Unit : MonoBehaviour, ITargetable{
     public bool m_IsMouseOver = false;
     public bool m_IsSelected = false;
 
-    private Ability m_AbilityOne;
-    private Ability m_AbilityTwo;
-    private Ability m_AbilitySpecial;
-    private Ability m_AbilityUltimate;
+    
 
 
     #endregion
 
     #region Private members
     private float m_UnitHeight;
-
     private string m_PortraitImagePath = "Units/Portraits/";
+    /// <summary>
+    /// Abilities
+    /// </summary>
+    private Ability m_AbilityOne;
+    private Ability m_AbilityTwo;
+    private Ability m_AbilitySpecial;
+    private Ability m_AbilityUltimate;
+
+    
 
     #endregion
 
@@ -160,8 +174,9 @@ public class Unit : MonoBehaviour, ITargetable{
     /// <summary>
     /// At lvl 1
     /// </summary>
-    public void UseAbilityOne()
+    public void UseAbilityOne(ITargetable target)
     {
+        info.utility -= m_AbilityOne.Use(info.utility, target);
         UpdateUI();
     }
     /// <summary>
@@ -199,6 +214,12 @@ public class Unit : MonoBehaviour, ITargetable{
         info.baseDefence = 5;
         info.utility = 2;
         info.name = "the_name_of_the_hero";
+
+        m_AbilityOne = new Ability();
+        m_AbilityTwo = new Ability();
+        m_AbilitySpecial = new Ability();
+        m_AbilityUltimate = new Ability();
+
         ////////////////////
 
         //Set the height at which to display UI elements.
@@ -297,52 +318,73 @@ public class Unit : MonoBehaviour, ITargetable{
     {
         m_Deck.Draw_From_Deck();
     }
-
+    public LayerMask mask;
     public void Select()
     {
+        
         m_IsSelected = true;
+        TargetingTracer.instance.SetOrigin(m_TargetingLocation, mask);
         ReferenceHolder.instance.UnitUI.SetActive(true);
     }
 
     public void Deselect()
     {
         m_IsSelected = false;
+        TargetingTracer.instance.Close();
         ReferenceHolder.instance.UnitUI.SetActive(false);
     }
 
-    public void ReceiveEffects(int numberOfEffects, int[] effectModifier, params Effect[] args)
+    public Vector3 GetTargetLocation()
     {
-        for (int currentEffect = 0; currentEffect < numberOfEffects; currentEffect++)
+        return m_TargetingLocation.position;
+    }
+
+    public void ReceiveEffects(Effect[] args)
+    {
+        for (int currentEffect = 0; currentEffect < args.Length; currentEffect++)
         {
-            ExecuteEffect(args[currentEffect], effectModifier[currentEffect]);
+            ExecuteEffect(args[currentEffect]);
         }
     }
 
-    private void ExecuteEffect(Effect effect, int modifier)
+    private void ExecuteEffect(Effect effect)
     {
-        switch (effect)
+        switch (effect.type)
         {
-            case Effect.none:
+            case EEffect.none:
+                Debug.Log("This Does no effect");
                 break;
-            case Effect.attack:
+            case EEffect.attack:
+                ReceiveAttack(effect.value);
                 break;
-            case Effect.modify_health:
+            case EEffect.modify_health:
                 break;
-            case Effect.modify_armor:
+            case EEffect.modify_armor:
                 break;
-            case Effect.modify_utility:
+            case EEffect.modify_utility:
                 break;
-            case Effect.modify_card_drawned:
+            case EEffect.modify_card_drawned:
                 break;
-            case Effect.permanent_modify_armor:
+            case EEffect.permanent_modify_armor:
                 break;
-            case Effect.permanent_modify_health:
+            case EEffect.permanent_modify_health:
                 break;
-            case Effect.permanent_modify_card_drawned:
+            case EEffect.permanent_modify_card_drawned:
                 break;
             default:
                 break;
         }
+    }
+
+    private void ReceiveAttack(int force)
+    {
+        if (info.defence >= force)
+        {
+            info.defence -= force;
+        }
+
+
+
     }
 
     #endregion

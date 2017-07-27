@@ -3,6 +3,7 @@ using NSGameplay;
 /// <summary>
 /// Base Class
 /// </summary>
+[System.Serializable]
 public class Ability {
 
     /// <summary>
@@ -35,25 +36,37 @@ public class Ability {
     /// What can this ability target.
     /// </summary>
     LayerMask targetableMask;
+    /// <summary>
+    /// The actual effects this ability do.
+    /// </summary>
+    public Effect[] effects;
 
     public void SelectTarget()
     {
         return;
     }
 
-    public void Use(int utility)
+    public int Use(int utility, ITargetable target)
     {
+        if (numberOfTimeUsed >= numberOfUsesPerTurn)
+        {
+            //TODO: Play sound letting the player know that this ability cannot be used.
+            return 0;
+        }
         if (utility < cost)
         {
             //TODO: Play sound letting the player know they do not have the necessary utlitity banked.
-            return;
+            return 0;
         }
-        
+        numberOfUsesPerTurn--;
+        SendEffect(target);
+
+        return cost;
     }
 
-    public void SendEffect()
+    public void SendEffect(ITargetable target)
     {
-
+        target.ReceiveEffects(effects);
     }
 
     public void OnTurnBegin()

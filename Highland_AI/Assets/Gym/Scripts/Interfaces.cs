@@ -21,5 +21,7 @@ public interface ITargetable
     void Select();
     void Deselect();
 
-    void ReceiveEffects(int numberOfEffects, int[] effectModifier, params Effect[] args);
+    UnityEngine.Vector3 GetTargetLocation();
+
+    void ReceiveEffects(Effect[] args);
 }

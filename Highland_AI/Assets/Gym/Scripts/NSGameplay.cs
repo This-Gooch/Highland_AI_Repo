@@ -1,4 +1,6 @@
-﻿namespace NSGameplay {
+﻿using System;
+
+namespace NSGameplay {
 
     /// <summary>
     /// For targets not choosen by the player the game will select
@@ -25,7 +27,7 @@
     /// "reduce a target's armor by 5 and attack it", the ability will have a Effect.attack and Effect.modify_armor
     /// attached with a value of -5 for modify_armor held in a parallel array.
     /// </summary>
-    public enum Effect
+    public enum EEffect
     {
         none,
         attack,
@@ -37,6 +39,39 @@
         permanent_modify_health,
         permanent_modify_card_drawned
     }
+
+    [System.Serializable]
+    public struct Effect : IDuration
+    {
+        public EEffect type;
+        public int value;
+
+        public int originalDuration;
+        public int duration;
+
+        public void Increment(int modifier)
+        {
+            duration += modifier;
+        }
+
+        public void SetDuration(int duration)
+        {
+            this.duration = duration;
+        }
+
+        public void Decrement(int modifier)
+        {
+            duration -= modifier;
+        }
+
+        public void Reset()
+        {
+            duration = originalDuration;
+        }
+
+        
+    }
+
 
     //Card/Action related namespace.
     namespace Cards
