@@ -1,4 +1,5 @@
 ﻿using UnityEngine.EventSystems;
+using NSGameplay;
 /// <summary>
 /// Interface that lets you increment decrement
 /// a duration value.
@@ -12,4 +13,13 @@ public interface IDuration
     void Decrement(int modifier);
 
     void Reset();
+}
+
+
+public interface ITargetable
+{
+    void Select();
+    void Deselect();
+
+    void ReceiveEffects(int numberOfEffects, int[] effectModifier, params Effect[] args);
 }

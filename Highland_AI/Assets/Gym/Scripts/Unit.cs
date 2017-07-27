@@ -82,7 +82,7 @@ public class UnitInfo
     
     public string portraitPath { get; set; }
 }
-public class Unit : MonoBehaviour{
+public class Unit : MonoBehaviour, ITargetable{
 
     #region Editor references
     
@@ -100,10 +100,10 @@ public class Unit : MonoBehaviour{
     public bool m_IsMouseOver = false;
     public bool m_IsSelected = false;
 
-    public Ability m_AbilityOne;
-    public Ability m_AbilityTwo;
-    public Ability m_AbilitySpecial;
-    public Ability m_AbilityUltimate;
+    private Ability m_AbilityOne;
+    private Ability m_AbilityTwo;
+    private Ability m_AbilitySpecial;
+    private Ability m_AbilityUltimate;
 
 
     #endregion
@@ -156,7 +156,7 @@ public class Unit : MonoBehaviour{
 
     #endregion
 
-    #region public Methods
+    #region Player called Methods
     /// <summary>
     /// At lvl 1
     /// </summary>
@@ -185,14 +185,10 @@ public class Unit : MonoBehaviour{
     {
         UpdateUI();
     }
-    //Draw a card.
-    public void Draw()
-    {
-        m_Deck.Draw_From_Deck();
-    }
+   
     #endregion
 
-    #region private Methods
+    #region Initialization
     //Init on start.
     private void Initialize()
     {
@@ -251,18 +247,7 @@ public class Unit : MonoBehaviour{
     {
             
     }
-    //This unit is selected
-    void Select()
-    {
-        m_IsSelected = true;
-        ReferenceHolder.instance.UnitUI.SetActive(true);
-    }
-    //This unit is getting deselected
-    void Deselect()
-    {
-        m_IsSelected = false;
-        ReferenceHolder.instance.UnitUI.SetActive(false);
-    }
+
 
     #endregion
 
@@ -293,7 +278,6 @@ public class Unit : MonoBehaviour{
         m_AbilityTwo.OnTurnBegin();
         m_AbilitySpecial.OnTurnBegin();
         m_AbilityUltimate.OnTurnBegin();
-
     }
 
     public void OnMouseEnter()
@@ -304,6 +288,61 @@ public class Unit : MonoBehaviour{
     public void OnMouseExit()
     {
         m_IsMouseOver = false;
+    }
+    #endregion
+
+    #region GamePlay Methods
+    //Draw a card.
+    public void Draw()
+    {
+        m_Deck.Draw_From_Deck();
+    }
+
+    public void Select()
+    {
+        m_IsSelected = true;
+        ReferenceHolder.instance.UnitUI.SetActive(true);
+    }
+
+    public void Deselect()
+    {
+        m_IsSelected = false;
+        ReferenceHolder.instance.UnitUI.SetActive(false);
+    }
+
+    public void ReceiveEffects(int numberOfEffects, int[] effectModifier, params Effect[] args)
+    {
+        for (int currentEffect = 0; currentEffect < numberOfEffects; currentEffect++)
+        {
+            ExecuteEffect(args[currentEffect], effectModifier[currentEffect]);
+        }
+    }
+
+    private void ExecuteEffect(Effect effect, int modifier)
+    {
+        switch (effect)
+        {
+            case Effect.none:
+                break;
+            case Effect.attack:
+                break;
+            case Effect.modify_health:
+                break;
+            case Effect.modify_armor:
+                break;
+            case Effect.modify_utility:
+                break;
+            case Effect.modify_card_drawned:
+                break;
+            case Effect.permanent_modify_armor:
+                break;
+            case Effect.permanent_modify_health:
+                break;
+            case Effect.permanent_modify_card_drawned:
+                break;
+            default:
+                break;
+        }
     }
 
     #endregion
