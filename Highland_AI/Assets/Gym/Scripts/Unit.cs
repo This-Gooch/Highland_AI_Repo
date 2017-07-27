@@ -46,7 +46,7 @@ public class UnitInfo
     //Main constructor
     public UnitInfo(int health, int defence, int attack, int utility, string name)
     {
-        this.health = health;
+        this.baseHealth = health;
         this.attack = attack;
         this.baseDefence = defence;
         this.defence = defence;
@@ -58,6 +58,7 @@ public class UnitInfo
     /// Name is both the card's displayed Name AND id.
     /// </summary>
     public string name { get; set; }
+    public int baseHealth { get; set; }
     public int health { get; set; }
     /// <summary>
     /// Current armor
@@ -116,7 +117,7 @@ public class Unit : MonoBehaviour, ITargetable{
 
     #region Private members
     private float m_UnitHeight;
-    private string m_PortraitImagePath = "Units/Portraits/";
+    
     /// <summary>
     /// Abilities
     /// </summary>
@@ -214,6 +215,7 @@ public class Unit : MonoBehaviour, ITargetable{
         info.baseDefence = 5;
         info.utility = 2;
         info.name = "the_name_of_the_hero";
+        info.portraitPath = "healer";
 
         m_AbilityOne = new Ability();
         m_AbilityTwo = new Ability();
@@ -222,8 +224,6 @@ public class Unit : MonoBehaviour, ITargetable{
 
         ////////////////////
 
-        //Set the height at which to display UI elements.
-        //m_UnitHeight = 
 
 
         info.exhausted = false;
@@ -324,7 +324,7 @@ public class Unit : MonoBehaviour, ITargetable{
         
         m_IsSelected = true;
         TargetingTracer.instance.SetOrigin(m_TargetingLocation, mask);
-        ReferenceHolder.instance.UnitUI.SetActive(true);
+        ReferenceHolder.instance.UnitUI.SetActive(true, this);
     }
 
     public void Deselect()

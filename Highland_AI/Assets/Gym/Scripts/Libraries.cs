@@ -23,6 +23,8 @@ public class Libraries : MonoBehaviour {
             Destroy(this);
         }
         instance = this;
+
+
     }
 
     //Repository of all cards data.
@@ -40,7 +42,17 @@ public class Libraries : MonoBehaviour {
             Library_Card[c.id] = c;
             Debug.Log("Loading : " + c.name );
         }        
-    }    
+    }
+
+    public void Load()
+    {
+        //Units
+        XMLDataSerializer.LoadUnits("Assets/Data/Units.xml");
+        //Cards
+        XMLDataSerializer.LoadCards("Assets/Data/Cards.xml");
+        //Todo Abilities
+        //XMLDataSerializer.LoadAbilities("Assets/Data/Abilities.xml");
+    }
 
     //Loads the unit library from file.
     public void Load_Unit_Library(List<UnitInfo> list)

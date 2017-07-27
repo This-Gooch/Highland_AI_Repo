@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using NSGameplay.Cards;
+
 /// <summary>
 /// Class containing all the cards (Actions).
 /// Mostly a holder but with functions to draw, shuffle and move cards.
@@ -102,4 +104,40 @@ public class Deck {
     
     #endregion
 
+}
+
+[System.Serializable]
+public class DeckList
+{
+    public int size;
+    public List<string> deck;
+
+    public bool Validate(EDeckType type)
+    {
+        if (deck.Count < Rules.instance._MinimumDeckSize || deck.Count > Rules.instance._MaximumDeckSize)
+        {
+            UnityEngine.Debug.LogError("Invalid Deck Size " + deck.Count + ". Size must be between " 
+                        + Rules.instance._MinimumDeckSize+ " and "+ Rules.instance._MaximumDeckSize + ". See RuleManager object in the scene.");
+            return false;
+        }
+        switch (type)
+        {
+            case EDeckType.Standard:
+                break;
+            case EDeckType.All_Unique:
+                break;
+            case EDeckType.Max_Two:
+                break;
+            case EDeckType.Max_Three:
+                break;
+            case EDeckType.Max_Four:
+                break;
+            case EDeckType.No_Rules:
+                break;
+            default:
+                return false;
+                break;
+        }
+        return true;
+    }
 }

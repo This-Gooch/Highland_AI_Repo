@@ -6,7 +6,7 @@ public class ReferenceHolder : MonoBehaviour {
 
     public static ReferenceHolder instance;
 
-    public GameObject UnitUI;
+    public UI_UnitController UnitUI;
 
     private void Awake()
     {

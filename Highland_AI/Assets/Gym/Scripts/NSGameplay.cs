@@ -146,8 +146,18 @@ namespace NSGameplay {
             public string description { get; set; }
         }
 
-        
-
+        /// <summary>
+        /// Types of deck building option.
+        /// </summary>
+        public enum EDeckType
+        {
+            Standard,
+            All_Unique,
+            Max_Two,
+            Max_Three,
+            Max_Four,
+            No_Rules
+        }
 
     }
 

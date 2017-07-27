@@ -64,6 +64,13 @@ public static class XMLDataSerializer
         fs.Close();
     }
 
+    #region InGame saves/loads
+    //Loads all the cards of a specific deck.
+    public static Deck LoadDeck(string name)
+    {
+        return new Deck();
+    }
+    #endregion
 
 
 }

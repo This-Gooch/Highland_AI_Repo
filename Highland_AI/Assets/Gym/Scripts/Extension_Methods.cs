@@ -104,7 +104,7 @@ public static class AdvanceMath
     {
         if (chord / 2f < sagitta)
         {
-            UnityEngine.Debug.LogWarning("Invalid circle, returning 0. Sagitta cannot be longer than a chord.");
+            //UnityEngine.Debug.LogWarning("Invalid circle, returning 0. Sagitta cannot be longer than a chord.");
             return 0f;
         }
         float x0 = chord / 2f;
