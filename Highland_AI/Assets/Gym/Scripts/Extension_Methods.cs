@@ -86,4 +86,37 @@ public static class Extension_Methods {
 
     #endregion
 
+    
 }
+
+#region Math
+
+public static class AdvanceMath
+{
+    /// <summary>
+    /// Calculates the Y position on an arc given the Chord(Length) and Sagitta(Height) and current X position.
+    /// Does not work on impossible circles.
+    /// </summary>
+    /// <param name="chord"></param>
+    /// <param name="sagitta"></param>
+    /// <returns></returns>
+    public static float Calculate_deltaY_Arc(float chord, float sagitta, float currentX)
+    {
+        if (chord / 2f < sagitta)
+        {
+            UnityEngine.Debug.LogWarning("Invalid circle, returning 0. Sagitta cannot be longer than a chord.");
+            return 0f;
+        }
+        float x0 = chord / 2f;
+
+        float y0 = (sagitta - UnityEngine.Mathf.Pow(x0, 2) / sagitta) / 2f;
+
+        float r2 = UnityEngine.Mathf.Pow(x0, 2) + UnityEngine.Mathf.Pow(y0, 2);
+
+        float yDelta = y0 + UnityEngine.Mathf.Sqrt(r2 - UnityEngine.Mathf.Pow((currentX - x0), 2));
+
+        return yDelta;
+    }
+}
+
+#endregion

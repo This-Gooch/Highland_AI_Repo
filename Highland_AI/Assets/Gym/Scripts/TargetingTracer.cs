@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// This traces a targeting arc from the Unit/card/etc targeting to
 /// the target.
@@ -11,14 +12,16 @@ public class TargetingTracer : MonoBehaviour {
     public static TargetingTracer instance;
 
     public int _LineRendererNumberOfPositions = 5;
-    public float _ArcDegrees = 30f;
+    public float _ArcHeight = 10f;
 
     private LineRenderer lr;
 
     private LayerMask targetableMask = 0;
     private Transform origin = null;
     private Vector3 target = Vector3.zero;
+    private float tileOffset = 0f;
 
+    public float tileOffsetSpeed = 5f;
 
     private void Awake()
     {
@@ -61,11 +64,19 @@ public class TargetingTracer : MonoBehaviour {
 
             for (int i = 0; i < _LineRendererNumberOfPositions; ++i)
             {
-                positions[i] = origin.position + (direction * length * i/_LineRendererNumberOfPositions);
+                float deltaX = length * i / _LineRendererNumberOfPositions;
+                positions[i] = origin.position + (direction * deltaX);
+                //Arc it
+                if(i ==0 || i == _LineRendererNumberOfPositions-1 )
+                Debug.Log("delta length : " + deltaX + " CalculatedY added :" + AdvanceMath.Calculate_deltaY_Arc(length, _ArcHeight, deltaX));
+                
+                positions[i] += Vector3.up * AdvanceMath.Calculate_deltaY_Arc(length, _ArcHeight, deltaX);
             }
 
             lr.numPositions = positions.Length;
             lr.SetPositions(positions);
+            tileOffset -= tileOffsetSpeed * Time.deltaTime;
+            lr.material.mainTextureOffset = new Vector2(tileOffset, 0f);
         }
 	}
 
@@ -82,6 +93,7 @@ public class TargetingTracer : MonoBehaviour {
 
     public void Close()
     {
+        tileOffset = 0f;
         targetableMask = 0;
         origin = null;
         target = Vector3.zero;
