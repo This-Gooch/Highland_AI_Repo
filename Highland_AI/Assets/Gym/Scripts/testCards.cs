@@ -56,9 +56,9 @@ public class testCards : MonoBehaviour {
     private void CreateNewCardToLibrary()
     {
         Minion c = new Minion();
-        c.id = "Minion";
+        
         c.cost = 2;
-        c.name = c.id.ToString();
+        c.name = c.name.ParseName();
         c.tooltip = new NSGameplay.Cards.Tooltip();
         c.tooltip.description = "The description.";
         c.tooltip.title = "Title of tooltip";
@@ -89,9 +89,9 @@ public class testCards : MonoBehaviour {
     private void CreateNewCard()
     {
         Minion c = new Minion();
-        c.id = "Minion";
+        
         c.cost = 2;
-        c.name = c.id.ToString();
+        c.name = c.name.ParseName();
         c.tooltip = new NSGameplay.Cards.Tooltip();
         c.tooltip.description = "The description.";
         c.tooltip.title = "Title of tooltip";

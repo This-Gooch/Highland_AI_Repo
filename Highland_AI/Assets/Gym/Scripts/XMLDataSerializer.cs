@@ -66,9 +66,32 @@ public static class XMLDataSerializer
 
     #region InGame saves/loads
     //Loads all the cards of a specific deck.
-    public static Deck LoadDeck(string name)
+    //Naming convention for decks should be hero_name+deck_given_name
+    public static DeckList LoadDeck(string path)
     {
-        return new Deck();
+        if (!File.Exists(path))
+        {
+            Debug.LogError("FILE " + path + " NOT FOUND!");
+            return null;
+        }
+        XmlSerializer serializer = new XmlSerializer(typeof(DeckList));
+        // To read the file, create a FileStream.
+        FileStream fs = new FileStream(path, FileMode.Open);
+        // Call the Deserialize method and cast to the object type.
+        DeckList loadedlist = (DeckList)serializer.Deserialize(fs);
+
+
+        fs.Close();
+        return loadedlist;
+    }
+    //Save all the cards of a specific deck.
+    //Naming convention for decks should be hero_name+deck_given_name
+    public static void SaveDeck(DeckList newList, string path)
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(DeckList));
+        FileStream fs = new FileStream(path, FileMode.Create);
+        serializer.Serialize(fs, newList);
+        fs.Close();
     }
     #endregion
 

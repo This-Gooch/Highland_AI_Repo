@@ -143,7 +143,7 @@ public class TheLibrarian : EditorWindow {
         {
             case 0:
                 Action act = new Action();
-                act.id = "Test card One";
+                
                 act.type = NSGameplay.Cards.ECardType.Instant;
                 act.cost = utilityCost;
                 act.name = cardName;
@@ -165,7 +165,7 @@ public class TheLibrarian : EditorWindow {
                 break;
             case 1:
                 Minion min = new Minion();
-                min.id = "Test Card two";
+                
                 min.type = NSGameplay.Cards.ECardType.Minion;
                 min.cost = 2;
                 min.name = cardName;

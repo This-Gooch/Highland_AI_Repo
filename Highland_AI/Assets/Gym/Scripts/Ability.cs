@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using NSGameplay;
+using System;
 /// <summary>
 /// Base Class
 /// </summary>
 [System.Serializable]
-public class Ability {
+public class Ability : IEffector{
 
     /// <summary>
     /// Level required to use.
@@ -35,11 +36,25 @@ public class Ability {
     /// <summary>
     /// What can this ability target.
     /// </summary>
-    LayerMask targetableMask;
+    public LayerMask targetableMask;
     /// <summary>
     /// The actual effects this ability do.
     /// </summary>
     public Effect[] effects;
+
+    //Constructors
+    public Ability(){  }
+
+    public Ability(Effect[] e, int level, int cost, int usesPerTurn, bool canTarget, LayerMask targetMask, TargetLayer TLayer = TargetLayer.none)
+    {
+        this.effects = e;
+        this.levelRequired = level;
+        this.cost = cost;
+        this.numberOfUsesPerTurn = usesPerTurn;
+        this.targetable = canTarget;
+        this.targetableMask = targetMask;
+        this.targetLayer = TLayer;        
+    }
 
     public void SelectTarget()
     {
@@ -59,12 +74,12 @@ public class Ability {
             return 0;
         }
         numberOfUsesPerTurn--;
-        SendEffect(target);
+        SendEffects(target);
 
         return cost;
     }
 
-    public void SendEffect(ITargetable target)
+    public void SendEffects(ITargetable target)
     {
         target.ReceiveEffects(effects);
     }
@@ -73,6 +88,7 @@ public class Ability {
     {
         numberOfTimeUsed = 0;
     }
+
 }
 
 

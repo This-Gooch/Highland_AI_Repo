@@ -39,7 +39,7 @@ public class Libraries : MonoBehaviour {
     {
         foreach (Card c in list)
         {
-            Library_Card[c.id] = c;
+            Library_Card[c.name] = c;
             Debug.Log("Loading : " + c.name );
         }        
     }
@@ -68,12 +68,12 @@ public class Libraries : MonoBehaviour {
     public bool Save_Card_Local(Card c)
     {
         bool IsNewEntry = true;
-        if (Library_Card.ContainsKey(c.id))
+        if (Library_Card.ContainsKey(c.name))
         {
-            Library_Card[c.id] = c;
+            Library_Card[c.name] = c;
             IsNewEntry = false;
         }
-        else { Library_Card.Add(c.id, c); }
+        else { Library_Card.Add(c.name, c); }
         return IsNewEntry;
     }
 

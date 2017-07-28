@@ -175,29 +175,46 @@ public class Unit : MonoBehaviour, ITargetable{
     /// <summary>
     /// At lvl 1
     /// </summary>
-    public void UseAbilityOne(ITargetable target)
+    public void SelectAbilityOne()
+    {
+        TargetingTracer.instance.Close();
+        TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityOne.targetableMask, m_AbilityOne, this);
+    }
+    private void UseAbilityOne(ITargetable target)
     {
         info.utility -= m_AbilityOne.Use(info.utility, target);
-        UpdateUI();
+        ReferenceHolder.instance.UnitUI.Refresh(this);
     }
     /// <summary>
     /// At lvl 2
     /// </summary>
-    public void UseAbilityTwo()
+    public void SelectAbilityTwo()
+    {
+
+    }
+    private void UseAbilityTwo()
     {
         UpdateUI();
     }
     /// <summary>
     /// At lvl 3
     /// </summary>
-    public void UseSpecial()
+    public void SelectAbilitySpecial()
+    {
+
+    }
+    private void UseSpecial()
     {
         UpdateUI();
     }
     /// <summary>
     /// At lvl 4
     /// </summary>
-    public void UseUltimate()
+    public void SelectAbilityUltimate()
+    {
+
+    }
+    private void UseUltimate()
     {
         UpdateUI();
     }
@@ -213,14 +230,21 @@ public class Unit : MonoBehaviour, ITargetable{
         info.health = 100;
         info.attack = 10;
         info.baseDefence = 5;
-        info.utility = 2;
+        info.utility = 10;
         info.name = "the_name_of_the_hero";
         info.portraitPath = "healer";
 
-        m_AbilityOne = new Ability();
-        m_AbilityTwo = new Ability();
-        m_AbilitySpecial = new Ability();
-        m_AbilityUltimate = new Ability();
+        Effect[] effects = new Effect[3];
+        effects[0] = new Effect(EEffect.attack, 5);
+        effects[1] = new Effect(EEffect.modify_armor, -2);
+        effects[2] = new Effect(EEffect.modify_health, -2);
+
+        
+        
+        m_AbilityOne = new Ability(effects, 1, 5, 1, true, mask);
+        m_AbilityTwo = new Ability(effects, 2, 5, 1, true, mask);
+        m_AbilitySpecial = new Ability(effects, 3, 5, 1, true, mask);
+        m_AbilityUltimate = new Ability(effects, 4, 5, 1, true, mask);
 
         ////////////////////
 
@@ -321,14 +345,14 @@ public class Unit : MonoBehaviour, ITargetable{
     public LayerMask mask;
     public void Select()
     {
-        
-        m_IsSelected = true;
-        TargetingTracer.instance.SetOrigin(m_TargetingLocation, mask);
+        //On select show the unit's UI
+        m_IsSelected = true;        
         ReferenceHolder.instance.UnitUI.SetActive(true, this);
     }
 
     public void Deselect()
     {
+        //hide the unit's UI on deselect
         m_IsSelected = false;
         TargetingTracer.instance.Close();
         ReferenceHolder.instance.UnitUI.SetActive(false);
@@ -358,8 +382,10 @@ public class Unit : MonoBehaviour, ITargetable{
                 ReceiveAttack(effect.value);
                 break;
             case EEffect.modify_health:
+                ModifyHealth(effect.value);
                 break;
             case EEffect.modify_armor:
+                ModifyArmor(effect.value);
                 break;
             case EEffect.modify_utility:
                 break;
@@ -376,15 +402,35 @@ public class Unit : MonoBehaviour, ITargetable{
         }
     }
 
-    private void ReceiveAttack(int force)
+    private void ReceiveAttack(int value)
     {
-        if (info.defence >= force)
+        info.defence -= value;
+        if (info.defence < 0)
         {
-            info.defence -= force;
+            info.health += info.defence;
+            info.defence = 0;
+            if (info.health <= 0)
+            {
+                KillUnit();
+            }
         }
 
-
-
+    }
+    private void ModifyArmor(int value)
+    {
+        info.defence += value;
+        if (info.defence < 0)
+        {
+            info.defence = 0;
+        }
+    }
+    private void ModifyHealth(int value)
+    {
+        info.health += value;
+        if (info.health <= 0)
+        {
+            KillUnit();
+        }
     }
 
     #endregion

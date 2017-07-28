@@ -48,6 +48,14 @@ namespace NSGameplay {
 
         public int originalDuration;
         public int duration;
+        
+        public Effect(EEffect type, int value, int startingDuration = 0)
+        {
+            this.type = type;
+            this.value = value;
+            this.originalDuration = startingDuration;
+            this.duration = originalDuration;
+        }
 
         public void Increment(int modifier)
         {

@@ -8,6 +8,8 @@ public class UI_UnitController : MonoBehaviour {
 
     public static UI_UnitController instance;
 
+    private Unit m_SelectedUnit;
+
 
     #region Editor References
     [SerializeField]
@@ -61,7 +63,8 @@ public class UI_UnitController : MonoBehaviour {
     }
 
     public void SetActive(bool isActive, Unit unit)
-    {      
+    {
+        m_SelectedUnit = unit;
         Refresh(unit);        
         gameObject.SetActive(isActive);
     }
@@ -76,6 +79,25 @@ public class UI_UnitController : MonoBehaviour {
         _BaseDefense.text = unit.info.baseDefence.ToString();
         _CurrentLevel.text = unit.info.level.ToString();
         _ExhaustStatus.SetActive(unit.info.exhausted);
+    }
+    /// <summary>
+    /// Ability Usage.
+    /// </summary>
+    public void UseAbilityOne()
+    {
+        m_SelectedUnit.SelectAbilityOne();
+    }
+    public void UseAbilityTwo()
+    {
+
+    }
+    public void UseAbilitySpecial()
+    {
+
+    }
+    public void UseAbilityUltimate()
+    {
+
     }
 
 }

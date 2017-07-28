@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NSGameplay.Cards;
+using NSGameplay;
 
 /// <summary>
 /// This traces a targeting arc from the Unit/card/etc targeting to
@@ -20,6 +22,9 @@ public class TargetingTracer : MonoBehaviour {
     private Transform origin = null;
     private Vector3 target = Vector3.zero;
     private float tileOffset = 0f;
+
+    private IEffector targeterEntity;
+    private Unit unitSpendingUtility;
 
     public float tileOffsetSpeed = 5f;
 
@@ -51,6 +56,12 @@ public class TargetingTracer : MonoBehaviour {
                 if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Ground"))
                 {
                     target = hit.collider.GetComponent<ITargetable>().GetTargetLocation();
+                    if (Input.GetButtonDown("Select"))
+                    {
+                        //If we found a valid target.
+                        Debug.Log("Click a unit to attack");
+                        unitSpendingUtility.info.utility -= targeterEntity.Use(unitSpendingUtility.info.utility, hit.collider.GetComponent<ITargetable>());
+                    }
                 }
                 else
                 {
@@ -66,10 +77,6 @@ public class TargetingTracer : MonoBehaviour {
             {
                 float deltaX = length * i / _LineRendererNumberOfPositions;
                 positions[i] = origin.position + (direction * deltaX);
-                //Arc it
-                if(i ==0 || i == _LineRendererNumberOfPositions-1 )
-                Debug.Log("delta length : " + deltaX + " CalculatedY added :" + AdvanceMath.Calculate_deltaY_Arc(length, _ArcHeight, deltaX));
-                
                 positions[i] += Vector3.up * AdvanceMath.Calculate_deltaY_Arc(length, _ArcHeight, deltaX);
             }
 
@@ -85,14 +92,18 @@ public class TargetingTracer : MonoBehaviour {
         target = t;
     }
 
-    public void SetOrigin(Transform t, LayerMask mask)
+    public void SetOrigin(Transform t, LayerMask mask, IEffector targeter, Unit u = null)
     {
+        unitSpendingUtility = u;
+        targeterEntity = targeter;
         targetableMask = mask;
         origin = t;
     }
 
     public void Close()
     {
+        unitSpendingUtility = null;
+        targeterEntity = null;
         tileOffset = 0f;
         targetableMask = 0;
         origin = null;

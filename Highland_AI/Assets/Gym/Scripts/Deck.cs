@@ -112,6 +112,13 @@ public class DeckList
     public int size;
     public List<string> deck;
 
+    public void Populate(List<Card> cardList)
+    {
+        //cardList.Sort();
+        //todo sort function for cards
+
+    }
+
     public bool Validate(EDeckType type)
     {
         if (deck.Count < Rules.instance._MinimumDeckSize || deck.Count > Rules.instance._MaximumDeckSize)

@@ -43,8 +43,8 @@ public class CardList
 [XmlRoot("Card")]
 public abstract class Card {
 
-    //Te unique ID for the card.
-    public string id { get; set; }
+    //Te unique Name && ID for the card.
+    public string name { get; set; }
 
     //owning unit might be useless
     //public string owningUnit { get; set; }
@@ -55,7 +55,7 @@ public abstract class Card {
     //Type of card. Once played it will trigger differently.
     public ECardType type { get; set; }
     //Name of the card
-    public string name { get; set; }
+    
     //Cost for using the card.
     public int cost { get; set; }
     //Needs to be implemented in the child class.
