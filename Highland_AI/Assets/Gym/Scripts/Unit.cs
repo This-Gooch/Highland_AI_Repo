@@ -146,15 +146,25 @@ public class Unit : MonoBehaviour, ITargetable{
     {
         if (Input.GetButtonDown("Select"))
         {
+            
             //Clicking on a unit not selected.
-            if (m_IsMouseOver && !m_IsSelected)
-            {
-                Select();
-            }
-            //Clicking anywhere else deselects.
-            else if (!m_IsMouseOver && m_IsSelected)
+            if (!m_IsMouseOver && m_IsSelected) 
             {
                 Deselect();
+            }
+            //Clicking anywhere else deselects.
+            else if (m_IsMouseOver && !m_IsSelected)
+            {
+                if (TargetingTracer.instance.targeterEntity != null && (object)TargetingTracer.instance.targeterEntity != this)
+                {
+                    Debug.Log("This unit is getting targeted : " + gameObject.name);
+                }
+                else
+                {
+                    Debug.Log("Selecting : " + gameObject.name);
+                    Select();
+                }
+                
             }
         }
 
@@ -177,11 +187,14 @@ public class Unit : MonoBehaviour, ITargetable{
     /// </summary>
     public void SelectAbilityOne()
     {
+        Debug.Log("Selecting Ability One");
+        m_IsSelected = true;
         TargetingTracer.instance.Close();
         TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityOne.targetableMask, m_AbilityOne, this);
     }
     private void UseAbilityOne(ITargetable target)
     {
+        Debug.Log("Using Ability One");
         info.utility -= m_AbilityOne.Use(info.utility, target);
         ReferenceHolder.instance.UnitUI.Refresh(this);
     }
@@ -235,8 +248,8 @@ public class Unit : MonoBehaviour, ITargetable{
         info.portraitPath = "healer";
 
         Effect[] effects = new Effect[3];
-        effects[0] = new Effect(EEffect.attack, 5);
-        effects[1] = new Effect(EEffect.modify_armor, -2);
+        effects[1] = new Effect(EEffect.attack, 5);
+        effects[0] = new Effect(EEffect.modify_armor, -2);
         effects[2] = new Effect(EEffect.modify_health, -2);
 
         
@@ -345,6 +358,7 @@ public class Unit : MonoBehaviour, ITargetable{
     public LayerMask mask;
     public void Select()
     {
+        Debug.Log("Unit is selected : " + gameObject.name);
         //On select show the unit's UI
         m_IsSelected = true;        
         ReferenceHolder.instance.UnitUI.SetActive(true, this);
@@ -352,6 +366,7 @@ public class Unit : MonoBehaviour, ITargetable{
 
     public void Deselect()
     {
+        Debug.Log("Unit is deselected : " + gameObject.name);
         //hide the unit's UI on deselect
         m_IsSelected = false;
         TargetingTracer.instance.Close();
@@ -365,6 +380,7 @@ public class Unit : MonoBehaviour, ITargetable{
 
     public void ReceiveEffects(Effect[] args)
     {
+        Debug.Log("Unit" + gameObject.name + " receiving effects.");
         for (int currentEffect = 0; currentEffect < args.Length; currentEffect++)
         {
             ExecuteEffect(args[currentEffect]);
@@ -373,6 +389,7 @@ public class Unit : MonoBehaviour, ITargetable{
 
     private void ExecuteEffect(Effect effect)
     {
+        Debug.Log("Effect received: " + effect.type + " of value " + effect.value);
         switch (effect.type)
         {
             case EEffect.none:

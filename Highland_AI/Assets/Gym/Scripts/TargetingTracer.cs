@@ -23,7 +23,8 @@ public class TargetingTracer : MonoBehaviour {
     private Vector3 target = Vector3.zero;
     private float tileOffset = 0f;
 
-    private IEffector targeterEntity;
+    [System.NonSerialized]
+    public IEffector targeterEntity;
     private Unit unitSpendingUtility;
 
     public float tileOffsetSpeed = 5f;

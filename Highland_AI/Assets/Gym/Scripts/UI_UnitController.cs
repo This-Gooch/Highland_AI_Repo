@@ -58,7 +58,7 @@ public class UI_UnitController : MonoBehaviour {
     }
 
     public void SetActive(bool isActive)
-    {     
+    { 
         gameObject.SetActive(isActive);
     }
 

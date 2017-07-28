@@ -81,6 +81,7 @@ public class Ability : IEffector{
 
     public void SendEffects(ITargetable target)
     {
+        Debug.Log("Sending effects from ability");
         target.ReceiveEffects(effects);
     }
 
