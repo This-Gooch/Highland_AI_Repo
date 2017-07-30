@@ -109,9 +109,10 @@ public class Unit : MonoBehaviour, ITargetable{
 
     public bool m_IsMouseOver = false;
     public bool m_IsSelected = false;
+    public bool m_UsingAbility = false;
 
-    
-
+    //For debug
+    public LayerMask mask;
 
     #endregion
 
@@ -144,15 +145,13 @@ public class Unit : MonoBehaviour, ITargetable{
 
     private void Update()
     {
-        if (Input.GetButtonDown("Select"))
+        if (Input.GetButtonDown("Select") && !EventSystem.current.IsPointerOverGameObject())
         {
-            
-            //Clicking on a unit not selected.
             if (!m_IsMouseOver && m_IsSelected) 
             {
+                Debug.Log("Deselecting On click");
                 Deselect();
             }
-            //Clicking anywhere else deselects.
             else if (m_IsMouseOver && !m_IsSelected)
             {
                 if (TargetingTracer.instance.targeterEntity != null && (object)TargetingTracer.instance.targeterEntity != this)
@@ -188,9 +187,19 @@ public class Unit : MonoBehaviour, ITargetable{
     public void SelectAbilityOne()
     {
         Debug.Log("Selecting Ability One");
-        m_IsSelected = true;
-        TargetingTracer.instance.Close();
-        TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityOne.targetableMask, m_AbilityOne, this);
+        //TODO Currently only targeted abilities are simulated. Need to check if this ability use targeting.
+        if (m_AbilityOne.targetable)//The ability can be targeted.
+        {
+            m_IsSelected = true;
+            m_UsingAbility = true;
+            TargetingTracer.instance.Close();
+            TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityOne.targetableMask, m_AbilityOne, this);
+        }
+        else//The ability cannot be targeted.
+        {
+
+        }
+       
     }
     private void UseAbilityOne(ITargetable target)
     {
@@ -247,17 +256,18 @@ public class Unit : MonoBehaviour, ITargetable{
         info.name = "the_name_of_the_hero";
         info.portraitPath = "healer";
 
-        Effect[] effects = new Effect[3];
-        effects[1] = new Effect(EEffect.attack, 5);
-        effects[0] = new Effect(EEffect.modify_armor, -2);
-        effects[2] = new Effect(EEffect.modify_health, -2);
+        Effect[] effects1 = new Effect[3];
+        effects1[1] = new Effect(EEffect.attack, 5);
+        effects1[0] = new Effect(EEffect.modify_armor, -2);
+        effects1[2] = new Effect(EEffect.modify_health, -2);
 
-        
-        
-        m_AbilityOne = new Ability(effects, 1, 5, 1, true, mask);
-        m_AbilityTwo = new Ability(effects, 2, 5, 1, true, mask);
-        m_AbilitySpecial = new Ability(effects, 3, 5, 1, true, mask);
-        m_AbilityUltimate = new Ability(effects, 4, 5, 1, true, mask);
+        Effect[] effects2 = new Effect[3];
+        effects2[0] = new Effect(EEffect.modify_health, 15);
+
+        m_AbilityOne = new Ability(effects1, 1, 5, 1, true, mask);
+        m_AbilityTwo = new Ability(effects2, 2, 5, 1, false, mask, TargetLayer.all_ennemies);
+        m_AbilitySpecial = new Ability(effects1, 3, 5, 1, true, mask);
+        m_AbilityUltimate = new Ability(effects1, 4, 5, 1, true, mask);
 
         ////////////////////
 
@@ -340,6 +350,7 @@ public class Unit : MonoBehaviour, ITargetable{
 
     public void OnMouseEnter()
     {
+  
         m_IsMouseOver = true;
     }
 
@@ -355,7 +366,9 @@ public class Unit : MonoBehaviour, ITargetable{
     {
         m_Deck.Draw_From_Deck();
     }
-    public LayerMask mask;
+    
+
+
     public void Select()
     {
         Debug.Log("Unit is selected : " + gameObject.name);
@@ -369,6 +382,7 @@ public class Unit : MonoBehaviour, ITargetable{
         Debug.Log("Unit is deselected : " + gameObject.name);
         //hide the unit's UI on deselect
         m_IsSelected = false;
+        m_UsingAbility = false;
         TargetingTracer.instance.Close();
         ReferenceHolder.instance.UnitUI.SetActive(false);
     }

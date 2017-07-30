@@ -57,6 +57,16 @@ public class UI_UnitController : MonoBehaviour {
         }
     }
 
+    public void Select(Unit unit)
+    {
+
+    }
+
+    public void Deselect()
+    {
+
+    }
+
     public void SetActive(bool isActive)
     { 
         gameObject.SetActive(isActive);
@@ -89,15 +99,15 @@ public class UI_UnitController : MonoBehaviour {
     }
     public void UseAbilityTwo()
     {
-
+        m_SelectedUnit.SelectAbilityTwo();
     }
     public void UseAbilitySpecial()
     {
-
+        m_SelectedUnit.SelectAbilitySpecial();
     }
     public void UseAbilityUltimate()
     {
-
+        m_SelectedUnit.SelectAbilityUltimate();
     }
 
 }
