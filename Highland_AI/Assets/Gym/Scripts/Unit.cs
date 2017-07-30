@@ -53,6 +53,7 @@ public class UnitInfo
         this.utility = utility;
         this.name = name;
         this.exhausted = false;
+        this.fieldPosition = 0;
     }
     /// <summary>
     /// Name is both the card's displayed Name AND id.
@@ -83,10 +84,15 @@ public class UnitInfo
     /// </summary>
     public bool exhausted { get; set; }
     public int owningPlayer { get; set; }
+    /// <summary>
+    /// The field order that this unit starts at.
+    /// </summary>
+    public int fieldPosition { get; set; }
     
     public string portraitPath { get; set; }
 }
-public class Unit : MonoBehaviour, ITargetable{
+public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
+{
 
     #region Editor references
     
@@ -117,7 +123,6 @@ public class Unit : MonoBehaviour, ITargetable{
     #endregion
 
     #region Private members
-    private float m_UnitHeight;
     
     /// <summary>
     /// Abilities
@@ -212,9 +217,21 @@ public class Unit : MonoBehaviour, ITargetable{
     /// </summary>
     public void SelectAbilityTwo()
     {
+        Debug.Log("Selecting Ability Two");
+        //TODO Currently only targeted abilities are simulated. Need to check if this ability use targeting.
+        if (m_AbilityOne.targetable)//The ability can be targeted.
+        {
+            m_IsSelected = true;
+            m_UsingAbility = true;
+            TargetingTracer.instance.Close();
+            TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityOne.targetableMask, m_AbilityOne, this);
+        }
+        else//The ability cannot be targeted.
+        {
 
+        }
     }
-    private void UseAbilityTwo()
+    private void UseAbilityTwo(ITargetable target)
     {
         UpdateUI();
     }
@@ -255,6 +272,7 @@ public class Unit : MonoBehaviour, ITargetable{
         info.utility = 10;
         info.name = "the_name_of_the_hero";
         info.portraitPath = "healer";
+        info.fieldPosition = int.Parse(gameObject.name);
 
         Effect[] effects1 = new Effect[3];
         effects1[1] = new Effect(EEffect.attack, 5);
@@ -392,6 +410,106 @@ public class Unit : MonoBehaviour, ITargetable{
         return m_TargetingLocation.position;
     }
 
+    public ITargetable[] GetValidTargets(TargetLayer targetedLayer)
+    {
+        List<ITargetable> targets = new List<ITargetable>();
+        switch (targetedLayer)
+        {
+            case TargetLayer.none:
+                Debug.Log("No Targets. Ability must be invalid.");
+                break;
+            case TargetLayer.player_selected:
+                break;
+            case TargetLayer.self:
+                targets.Add(this);
+                break;
+            case TargetLayer.all:
+                foreach (ITargetable t in BattleManager.instance.P1_Units)
+                {
+                    targets.Add(t);
+                }
+                foreach (ITargetable t in BattleManager.instance.P2_Units)
+                {
+                    targets.Add(t);
+                }
+                break;
+            case TargetLayer.all_ennemies:
+                if (info.owningPlayer == 1)
+                {
+                    foreach (ITargetable t in BattleManager.instance.P2_Units)
+                    {
+                        targets.Add(t);
+                    }
+                }
+                else if(info.owningPlayer == 2)
+                {
+                    foreach (ITargetable t in BattleManager.instance.P1_Units)
+                    {
+                        targets.Add(t);
+                    }
+                }
+                break;
+            case TargetLayer.all_allies:
+                if (info.owningPlayer == 1)
+                {
+                    foreach (ITargetable t in BattleManager.instance.P1_Units)
+                    {
+                        targets.Add(t);
+                    }
+                }
+                else if (info.owningPlayer == 2)
+                {
+                    foreach (ITargetable t in BattleManager.instance.P2_Units)
+                    {
+                        targets.Add(t);
+                    }
+                }
+                break;
+            case TargetLayer.adjacent:
+                if (info.owningPlayer == 1)
+                {
+                    int numberofUnits = BattleManager.instance.P1_Units.Count;
+                    switch (numberofUnits)
+                    {
+                        case 1:
+                            Debug.LogError("Error trying to target adjancent but not allies are around.");
+                            break;
+                        case 2:
+                            //BattleManager.instance.P1_Units
+
+
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                    }
+                }
+                else if (info.owningPlayer == 2)
+                {
+                    foreach (ITargetable t in BattleManager.instance.P2_Units)
+                    {
+                        targets.Add(t);
+                    }
+                }
+                break;
+            case TargetLayer.first_left:
+                break;
+            case TargetLayer.first_right:
+                break;
+            case TargetLayer.all_left:
+                break;
+            case TargetLayer.all_right:
+                break;
+            case TargetLayer.front:
+                break;
+            default:
+                break;
+        }
+
+        return targets.ToArray();
+    }
+
     public void ReceiveEffects(Effect[] args)
     {
         Debug.Log("Unit" + gameObject.name + " receiving effects.");
@@ -466,5 +584,25 @@ public class Unit : MonoBehaviour, ITargetable{
 
     #endregion
 
+    #region Utility
+    /// <summary>
+    /// CompareTo for sort() on list.
+    /// </summary>
+    /// <param name="u"></param>
+    /// <returns></returns>
+    public int CompareTo(Unit u)
+    {
+        // A null value means that this object is greater.
+        if (u == null)
+        {
+            return 1;
+        }
+        else
+        {
+            return this.info.fieldPosition.CompareTo(u.info.fieldPosition);
+        }
+            
+    }
+    #endregion
 
 }

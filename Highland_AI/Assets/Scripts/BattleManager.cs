@@ -129,11 +129,13 @@ public class BattleManager : MonoBehaviour {
             if (u.info.owningPlayer == 1)
             {
                 P1_Units.Add(u);
+                P1_Units.Sort();
                 return true;
             }
             else if (u.info.owningPlayer == 2)
             {
                 P2_Units.Add(u);
+                P2_Units.Sort();
                 return true;
             }
             else
