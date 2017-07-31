@@ -61,7 +61,7 @@ public class Ability : IEffector{
         return;
     }
 
-    public int Use(int utility, ITargetable target)
+    public int Use(int utility, ITargetable[] target)
     {
         if (numberOfTimeUsed >= numberOfUsesPerTurn)
         {
@@ -74,7 +74,11 @@ public class Ability : IEffector{
             return 0;
         }
         numberOfUsesPerTurn--;
-        SendEffects(target);
+        for (int i = 0; i < target.Length; i++)
+        {
+            SendEffects(target[i]);
+        }
+        
 
         return cost;
     }

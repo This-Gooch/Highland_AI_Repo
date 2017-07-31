@@ -202,11 +202,11 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
         }
         else//The ability cannot be targeted.
         {
-
+            m_AbilityOne.Use(info.utility, GetValidTargets(m_AbilityOne.targetLayer));
         }
        
     }
-    private void UseAbilityOne(ITargetable target)
+    private void UseAbilityOne(ITargetable[] target)
     {
         Debug.Log("Using Ability One");
         info.utility -= m_AbilityOne.Use(info.utility, target);
@@ -219,21 +219,23 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
     {
         Debug.Log("Selecting Ability Two");
         //TODO Currently only targeted abilities are simulated. Need to check if this ability use targeting.
-        if (m_AbilityOne.targetable)//The ability can be targeted.
+        if (m_AbilityTwo.targetable)//The ability can be targeted.
         {
             m_IsSelected = true;
             m_UsingAbility = true;
             TargetingTracer.instance.Close();
-            TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityOne.targetableMask, m_AbilityOne, this);
+            TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityTwo.targetableMask, m_AbilityTwo, this);
         }
         else//The ability cannot be targeted.
         {
-
+            m_AbilityTwo.Use(info.utility, GetValidTargets(m_AbilityTwo.targetLayer));
         }
     }
-    private void UseAbilityTwo(ITargetable target)
+    private void UseAbilityTwo(ITargetable[] target)
     {
-        UpdateUI();
+        Debug.Log("Using Ability One");
+        info.utility -= m_AbilityTwo.Use(info.utility, target);
+        ReferenceHolder.instance.UnitUI.Refresh(this);
     }
     /// <summary>
     /// At lvl 3
@@ -279,8 +281,8 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
         effects1[0] = new Effect(EEffect.modify_armor, -2);
         effects1[2] = new Effect(EEffect.modify_health, -2);
 
-        Effect[] effects2 = new Effect[3];
-        effects2[0] = new Effect(EEffect.modify_health, 15);
+        Effect[] effects2 = new Effect[1];
+        effects2[0] = new Effect(EEffect.modify_health, -15);
 
         m_AbilityOne = new Ability(effects1, 1, 5, 1, true, mask);
         m_AbilityTwo = new Ability(effects2, 2, 5, 1, false, mask, TargetLayer.all_ennemies);
@@ -410,9 +412,18 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
         return m_TargetingLocation.position;
     }
 
+    /// <summary>
+    /// Returns all the valid targets base on the layer that is targeted.
+    /// the fieldPosition value of unit.info is used to determine this.
+    /// The positions on the field are has follow from left to right. (When a unit dies all units will have their fieldPosition recalculated.)
+    /// 1 - 2 - 3 - 4
+    /// </summary>
+    /// <param name="targetedLayer"></param>
+    /// <returns></returns>
     public ITargetable[] GetValidTargets(TargetLayer targetedLayer)
     {
         List<ITargetable> targets = new List<ITargetable>();
+        
         switch (targetedLayer)
         {
             case TargetLayer.none:
@@ -475,33 +486,161 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
                             Debug.LogError("Error trying to target adjancent but not allies are around.");
                             break;
                         case 2:
-                            //BattleManager.instance.P1_Units
-
-
+                            //Only need to add the other unit.
+                            foreach (Unit t in BattleManager.instance.P1_Units)
+                            {
+                                if (t != this)
+                                {
+                                    targets.Add(t);
+                                }                                
+                            }
                             break;
                         case 3:
-                            break;
                         case 4:
+                            foreach (Unit t in BattleManager.instance.P1_Units)
+                            {
+                                if (t != this)
+                                {
+                                    //If the unit is no further than 1 in field position. Add().
+                                    if (Mathf.Abs( t.info.fieldPosition - this.info.fieldPosition) == 1)
+                                    {
+                                        targets.Add(t);
+                                    }
+                                    
+                                }
+                            }  
                             break;
                     }
                 }
                 else if (info.owningPlayer == 2)
                 {
-                    foreach (ITargetable t in BattleManager.instance.P2_Units)
+                    int numberofUnits = BattleManager.instance.P2_Units.Count;
+                    switch (numberofUnits)
                     {
-                        targets.Add(t);
+                        case 1:
+                            Debug.LogError("Error trying to target adjancent but not allies are around.");
+                            break;
+                        case 2:
+                            //Only need to add the other unit.
+                            foreach (Unit t in BattleManager.instance.P2_Units)
+                            {
+                                if (t != this)
+                                {
+                                    targets.Add(t);
+                                }
+                            }
+                            break;
+                        case 3:
+                        case 4:
+                            foreach (Unit t in BattleManager.instance.P2_Units)
+                            {
+                                if (t != this)
+                                {
+                                    //If the unit is no further than 1 in field position. Add().
+                                    if (Mathf.Abs(t.info.fieldPosition - this.info.fieldPosition) == 1)
+                                    {
+                                        targets.Add(t);
+                                    }
+
+                                }
+                            }
+                            break;
                     }
                 }
                 break;
             case TargetLayer.first_left:
+                if (info.owningPlayer == 1)
+                {
+                    foreach (Unit t in BattleManager.instance.P1_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition == 1)
+                        {
+                            targets.Add(t);
+                            break;
+                        }                        
+                    }
+                }
+                else if (info.owningPlayer == 2)
+                {
+                    foreach (Unit t in BattleManager.instance.P2_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition == 1)
+                        {
+                            targets.Add(t);
+                            break;
+                        }
+                    }
+                }
                 break;
             case TargetLayer.first_right:
+                if (info.owningPlayer == 1)
+                {
+                    foreach (Unit t in BattleManager.instance.P1_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition == -1)
+                        {
+                            targets.Add(t);
+                            break;
+                        }
+                    }
+                }
+                else if (info.owningPlayer == 2)
+                {
+                    foreach (Unit t in BattleManager.instance.P2_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition == -1)
+                        {
+                            targets.Add(t);
+                            break;
+                        }
+                    }
+                }
                 break;
             case TargetLayer.all_left:
+                if (info.owningPlayer == 1)
+                {
+                    foreach (Unit t in BattleManager.instance.P1_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition <= -1)
+                        {
+                            targets.Add(t);
+                        }
+                    }
+                }
+                else if (info.owningPlayer == 2)
+                {
+                    foreach (Unit t in BattleManager.instance.P2_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition <= -1)
+                        {
+                            targets.Add(t);
+                        }
+                    }
+                }
                 break;
             case TargetLayer.all_right:
+                if (info.owningPlayer == 1)
+                {
+                    foreach (Unit t in BattleManager.instance.P1_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition >= 1)
+                        {
+                            targets.Add(t);
+                        }
+                    }
+                }
+                else if (info.owningPlayer == 2)
+                {
+                    foreach (Unit t in BattleManager.instance.P2_Units)
+                    {
+                        if (t.info.fieldPosition - this.info.fieldPosition >= 1)
+                        {
+                            targets.Add(t);
+                        }
+                    }
+                }
                 break;
-            case TargetLayer.front:
+            case TargetLayer.front://Not sure this will be used
                 break;
             default:
                 break;

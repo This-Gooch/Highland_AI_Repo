@@ -61,7 +61,8 @@ public class TargetingTracer : MonoBehaviour {
                     {
                         //If we found a valid target.
                         Debug.Log("Click a unit to attack");
-                        unitSpendingUtility.info.utility -= targeterEntity.Use(unitSpendingUtility.info.utility, hit.collider.GetComponent<ITargetable>());
+                        ITargetable[] hitTarget = new ITargetable[1] { hit.collider.GetComponent<ITargetable>() };
+                        unitSpendingUtility.info.utility -= targeterEntity.Use(unitSpendingUtility.info.utility, hitTarget);
                     }
                 }
                 else

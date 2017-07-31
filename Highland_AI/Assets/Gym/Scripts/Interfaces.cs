@@ -28,6 +28,6 @@ public interface ITargetable
 
 public interface IEffector
 {
-    int Use(int utilityAvailable, ITargetable target);
+    int Use(int utilityAvailable, ITargetable[] target);
     void SendEffects(ITargetable target);
 }
