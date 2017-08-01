@@ -1723,13 +1723,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c395940d30f261c4d9d5de0400b987bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Portrait: {fileID: 114345920943585038}
-  _Name: {fileID: 114004739474348830}
-  _Health: {fileID: 114726682252662310}
-  _Defence: {fileID: 114206272754657390}
-  _Attack: {fileID: 114609290305044038}
-  _Utility: {fileID: 114919856342234068}
   _Player: 2
+  m_TargetingLocation: {fileID: 0}
+  m_IsMouseOver: 0
+  m_IsSelected: 0
+  m_UsingAbility: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &114587100280387726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2180,12 +2181,7 @@ MonoBehaviour:
   _info: When this Character is exhausted, lose a bunch of stuff.When this Character
     is exhausted, lose a bunch of stuff.When this Character is exhausted, lose a bunch
     of stuff.
-  _backgroundColor: {r: 0.41911763, g: 0.41911763, b: 0.41911763, a: 1}
-  _titleFontColor: {r: 0, g: 0, b: 0, a: 1}
-  _infoFontColor: {r: 0, g: 0, b: 0, a: 1}
   _delay: 0.3
-  _SizeRationToWidth: 4.8
-  _HeightToWidthRatio: 0.5
 --- !u!114 &114919856342234068
 MonoBehaviour:
   m_ObjectHideFlags: 1

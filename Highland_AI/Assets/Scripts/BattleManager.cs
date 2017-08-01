@@ -452,9 +452,8 @@ public class BattleManager : MonoBehaviour {
     private void OnUnitDestroy(GameObject unit, int player)
     {
         Debug.Log("A Unit has died : " + unit.name + " from player " + player);
-        //Need to recalculate the field position of all units on the given side.
-
         CheckLethal();
+        RecalculateFieldPositions(unit.GetComponent<Unit>());
     }
 
     #endregion
