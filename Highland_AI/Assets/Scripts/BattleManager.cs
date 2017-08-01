@@ -15,13 +15,11 @@ public class BattleManager : MonoBehaviour {
     #region Public Member
     //Lists of player's units
     public List<Unit> P1_Units = new List<Unit>();
+    public List<Unit> P1_DeadUnits = new List<Unit>();
     public List<Unit> P2_Units = new List<Unit>();
+    public List<Unit> P2_DeadUnits = new List<Unit>();
     #endregion
 
-    #region Private member
-    
-
-    #endregion
 
 
     public bool selectingTarget;
@@ -60,6 +58,10 @@ public class BattleManager : MonoBehaviour {
         {
             state++;
             NextState();
+        }
+        if (Input.GetKeyDown(KeyCode.P))//Testing
+        {
+            RecalculateFieldPositions(P1_Units[1]);
         }
     }
 
@@ -116,6 +118,30 @@ public class BattleManager : MonoBehaviour {
         {
             state = State.GameOver_P1_Win;
             NextState();
+        }
+    }
+    //recalculates the field position of all units on a given side after a unit dies.
+    private void RecalculateFieldPositions(Unit deadUnit)
+    {
+        if (deadUnit.info.owningPlayer == 1)
+        {
+            P1_DeadUnits.Add(deadUnit);
+            P1_Units.Remove(deadUnit);
+            for (int i = 0; i < P1_Units.Count; i++)
+            {
+                //Field position are from 1-4
+                P1_Units[i].info.fieldPosition = i+1;
+            }
+        }
+        else
+        {
+            P2_DeadUnits.Add(deadUnit);
+            P2_Units.Remove(deadUnit);
+            for (int i = 0; i < P2_Units.Count; i++)
+            {
+                //Field position are from 1-4
+                P2_Units[i].info.fieldPosition = i+1;
+            }
         }
     }
     #endregion
@@ -193,7 +219,8 @@ public class BattleManager : MonoBehaviour {
         Debug.LogError("Error: No valid owner for unit -> " + u.info.owningPlayer);
         return transform;
     }
-
+    
+    
     #endregion
 
     #region States
@@ -425,6 +452,8 @@ public class BattleManager : MonoBehaviour {
     private void OnUnitDestroy(GameObject unit, int player)
     {
         Debug.Log("A Unit has died : " + unit.name + " from player " + player);
+        //Need to recalculate the field position of all units on the given side.
+
         CheckLethal();
     }
 

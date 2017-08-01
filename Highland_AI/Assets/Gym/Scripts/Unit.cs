@@ -192,7 +192,6 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
     public void SelectAbilityOne()
     {
         Debug.Log("Selecting Ability One");
-        //TODO Currently only targeted abilities are simulated. Need to check if this ability use targeting.
         if (m_AbilityOne.targetable)//The ability can be targeted.
         {
             m_IsSelected = true;
@@ -202,7 +201,7 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
         }
         else//The ability cannot be targeted.
         {
-            m_AbilityOne.Use(info.utility, GetValidTargets(m_AbilityOne.targetLayer));
+            UseAbilityOne(GetValidTargets(m_AbilityOne.targetLayer));
         }
        
     }
@@ -218,7 +217,6 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
     public void SelectAbilityTwo()
     {
         Debug.Log("Selecting Ability Two");
-        //TODO Currently only targeted abilities are simulated. Need to check if this ability use targeting.
         if (m_AbilityTwo.targetable)//The ability can be targeted.
         {
             m_IsSelected = true;
@@ -228,7 +226,7 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
         }
         else//The ability cannot be targeted.
         {
-            m_AbilityTwo.Use(info.utility, GetValidTargets(m_AbilityTwo.targetLayer));
+            UseAbilityTwo(GetValidTargets(m_AbilityTwo.targetLayer));
         }
     }
     private void UseAbilityTwo(ITargetable[] target)
@@ -242,22 +240,49 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
     /// </summary>
     public void SelectAbilitySpecial()
     {
-
+        Debug.Log("Selecting Special Ability");
+       
+        if (m_AbilitySpecial.targetable)//The ability can be targeted.
+        {
+            m_IsSelected = true;
+            m_UsingAbility = true;
+            TargetingTracer.instance.Close();
+            TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilitySpecial.targetableMask, m_AbilitySpecial, this);
+        }
+        else//The ability cannot be targeted.
+        {
+            UseSpecial(GetValidTargets(m_AbilitySpecial.targetLayer));
+        }
     }
-    private void UseSpecial()
+    private void UseSpecial(ITargetable[] target)
     {
-        UpdateUI();
+        Debug.Log("Using special Ability ");
+        info.utility -= m_AbilitySpecial.Use(info.utility, target);
+        ReferenceHolder.instance.UnitUI.Refresh(this);
     }
     /// <summary>
     /// At lvl 4
     /// </summary>
     public void SelectAbilityUltimate()
     {
-
+        Debug.Log("Selecting ultimate Ability");
+        if (m_AbilityUltimate.targetable)//The ability can be targeted.
+        {
+            m_IsSelected = true;
+            m_UsingAbility = true;
+            TargetingTracer.instance.Close();
+            TargetingTracer.instance.SetOrigin(m_TargetingLocation, m_AbilityUltimate.targetableMask, m_AbilityUltimate, this);
+        }
+        else//The ability cannot be targeted.
+        {
+            UseUltimate(GetValidTargets(m_AbilityUltimate.targetLayer));
+        }
     }
-    private void UseUltimate()
+    private void UseUltimate(ITargetable[] target)
     {
-        UpdateUI();
+        Debug.Log("Using ultimate ability");
+        info.utility -= m_AbilityUltimate.Use(info.utility, target);
+        ReferenceHolder.instance.UnitUI.Refresh(this);
     }
    
     #endregion
@@ -281,13 +306,20 @@ public class Unit : MonoBehaviour, ITargetable, IComparable<Unit>
         effects1[0] = new Effect(EEffect.modify_armor, -2);
         effects1[2] = new Effect(EEffect.modify_health, -2);
 
+        
+
+        m_AbilityOne = new Ability(effects1, 1, 5, 1, true, mask);
+
         Effect[] effects2 = new Effect[1];
         effects2[0] = new Effect(EEffect.modify_health, -15);
 
-        m_AbilityOne = new Ability(effects1, 1, 5, 1, true, mask);
         m_AbilityTwo = new Ability(effects2, 2, 5, 1, false, mask, TargetLayer.all_ennemies);
-        m_AbilitySpecial = new Ability(effects1, 3, 5, 1, true, mask);
-        m_AbilityUltimate = new Ability(effects1, 4, 5, 1, true, mask);
+        Effect[] effects3 = new Effect[1];
+        effects3[0] = new Effect(EEffect.modify_health, 10);
+        m_AbilitySpecial = new Ability(effects3, 3, 5, 1, false, mask, TargetLayer.adjacent);
+        Effect[] effects4 = new Effect[1];
+        effects4[0] = new Effect(EEffect.modify_armor, 10);
+        m_AbilityUltimate = new Ability(effects4, 4, 5, 1, false, mask, TargetLayer.all_allies);
 
         ////////////////////
 

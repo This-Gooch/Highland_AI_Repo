@@ -20,10 +20,10 @@ Contains the functionality of the Unit's abilities. The actual effectors are on 
 
 ##### Effect 
 Hold the actual effects an ability/card has.
-   `Public Members:  EEffect type;
+   ```Public Members:  EEffect type;
 					int value;
 					int originalDuration;
-					int duration;`
+					int duration;```
 					
 	The types of effects are defines as an enum in NSPGameplay namespace.
 
